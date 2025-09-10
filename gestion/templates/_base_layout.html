@@ -11,7 +11,18 @@
     <link href="{% static 'sb2/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'sb2/css/sb-admin-2.min.css' %}" rel="stylesheet">
 
-    {% block extra_head %}{% endblock %}
+    {% block extra_head %}
+    <style>
+        /* Slightly darker gray for table text to improve contrast */
+        table, table th, table td {
+            color: #4f4f4f !important; /* darker gray while keeping the gray tone */
+        }
+        /* Ensure small muted text in tables is also darker */
+        table .text-muted, table small {
+            color: #6b6b6b !important;
+        }
+    </style>
+    {% endblock %}
     {% htmx_script %}
 </head>
 <body id="page-top">
