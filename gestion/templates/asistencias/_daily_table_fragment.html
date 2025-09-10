@@ -43,7 +43,7 @@
             <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Asistencia</th>
+                    <th data-sort="asistencia" class="sortable" style="cursor: pointer;">Asistencia <small class="sort-indicator"></small></th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -109,6 +109,58 @@
             timeout = setTimeout(filter, 150);
         });
     }
+
+    // Sorting: click header to toggle sort by asistencia (Presente/Ausente)
+    // Store original order index for rows so we can restore original order reliably
+    fragment.querySelectorAll('table[data-group-index] tbody tr').forEach(function(r, i){
+        if(!r.dataset.origIndex) r.dataset.origIndex = i;
+    });
+
+    function sortTableByAttendance(tbl, mode){
+        // mode: 'original' | 'present' | 'absent'
+        var tbody = tbl.querySelector('tbody');
+        if(!tbody) return;
+        var rows = Array.from(tbody.querySelectorAll('tr'));
+        var annotated = rows.map(function(r){
+            var badge = r.querySelector('.badge.bg-success');
+            var present = !!badge || (r.querySelectorAll('td')[1] && normalize(r.querySelectorAll('td')[1].textContent).indexOf('presente') !== -1);
+            var orig = parseInt(r.dataset.origIndex || 0, 10);
+            return {row: r, present: present, orig: orig};
+        });
+
+        if(mode === 'original'){
+            annotated.sort(function(a,b){ return a.orig - b.orig; });
+        } else if(mode === 'present'){
+            annotated.sort(function(a,b){
+                if(a.present === b.present) return a.orig - b.orig;
+                return a.present ? -1 : 1;
+            });
+        } else if(mode === 'absent'){
+            annotated.sort(function(a,b){
+                if(a.present === b.present) return a.orig - b.orig;
+                return a.present ? 1 : -1;
+            });
+        }
+
+        // Re-append rows in new order
+        annotated.forEach(function(a){ tbody.appendChild(a.row); });
+    }
+
+    // Attach click handlers to sortable headers (cycle: original -> present -> absent -> original)
+    fragment.querySelectorAll('th[data-sort="asistencia"]').forEach(function(th){
+        var indicator = th.querySelector('.sort-indicator');
+        var states = ['original', 'present', 'absent'];
+    th.dataset.sortState = 'original';
+    if(indicator) indicator.textContent = '';
+        th.addEventListener('click', function(){
+            var cur = th.dataset.sortState || 'original';
+            var next = states[(states.indexOf(cur) + 1) % states.length];
+            th.dataset.sortState = next;
+            // update indicator
+            if(indicator) indicator.textContent = next === 'original' ? '' : (next === 'present' ? '▲' : '▼');
+            fragment.querySelectorAll('table[data-group-index]').forEach(function(tbl){ sortTableByAttendance(tbl, next); });
+        });
+    });
 
     // Recompute counters on HTMX swaps/updates (when rows or fragment change)
     document.body.addEventListener('htmx:afterSwap', function(e){
