@@ -38,7 +38,12 @@
 
     {% regroup estudiantes by grupo as grouped_students %}
     {% for group in grouped_students %}
-        <h2>Grupo: {{ group.grouper }} <small class="text-muted"> - Asistentes: <span id="attendance-count-{{ forloop.counter }}">0</span></small></h2>
+        <h2 class="d-flex flex-column flex-md-row align-items-start justify-content-between">Grupo: {{ group.grouper }}
+            <small class="text-muted d-flex flex-column flex-md-row gap-2 mt-2 mt-md-0 align-items-start align-items-md-center">
+                <span class="d-block">Asistentes: <strong id="attendance-count-{{ forloop.counter }}">0</strong></span>
+                <span class="d-block">Inasistentes: <strong id="absent-count-{{ forloop.counter }}">0</strong></span>
+            </small>
+        </h2>
         <table class="table table-striped table-bordered mb-4" data-group-index="{{ forloop.counter }}">
             <thead>
                 <tr>
@@ -65,22 +70,26 @@
     function normalize(s){ return (s||'').toLowerCase().trim(); }
 
     function updateAttendanceCounts(){
-        // for each table in the fragment, count present badges in visible rows
+        // for each table in the fragment, count present and absent badges in visible rows
         var tables = fragment.querySelectorAll('table[data-group-index]');
         tables.forEach(function(tbl){
             var idx = tbl.getAttribute('data-group-index');
             var presentCount = 0;
-            // only count visible rows
+            var absentCount = 0;
             tbl.querySelectorAll('tbody tr').forEach(function(r){
                 if(r.style.display === 'none') return;
-                // look for badge with bg-success or text 'Presente'
                 var badge = r.querySelector('.badge.bg-success');
-                if(badge || (r.querySelectorAll('td')[1] && normalize(r.querySelectorAll('td')[1].textContent).indexOf('presente') !== -1)){
+                var isPresent = badge || (r.querySelectorAll('td')[1] && normalize(r.querySelectorAll('td')[1].textContent).indexOf('presente') !== -1);
+                if(isPresent){
                     presentCount += 1;
+                } else {
+                    absentCount += 1;
                 }
             });
             var span = document.getElementById('attendance-count-' + idx);
             if(span) span.textContent = String(presentCount);
+            var absentSpan = document.getElementById('absent-count-' + idx);
+            if(absentSpan) absentSpan.textContent = String(absentCount);
         });
     }
 
