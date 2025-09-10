@@ -7,7 +7,8 @@
             <a href="{% url 'download_asistencias_diaria' grupo=grupo fecha=fecha|date:'Y-m-d' %}?format=xlsx" class="btn btn-outline-success btn-sm">Descargar Reporte Diario</a>
             {# Botón de desactivar visible sólo para administradores (superuser o rol ADMINISTRADOR) #}
             {% if request.user.is_superuser or request.user.rol == 'ADMINISTRADOR' %}
-                <form hx-post="{% url 'deactivate_session_day' %}" hx-target="#daily-attendance-fragment" hx-swap="outerHTML" method="POST" class="d-inline ms-2" onsubmit="(function(btn){btn.disabled=true; btn.innerText='Desactivando...';})(this.querySelector('button[type=submit]'))">
+                {# Add a bit more left margin so the deactivate button is visually separated from the download link #}
+                <form hx-post="{% url 'deactivate_session_day' %}" hx-target="#daily-attendance-fragment" hx-swap="outerHTML" method="POST" class="d-inline ms-3" onsubmit="(function(btn){btn.disabled=true; btn.innerText='Desactivando...';})(this.querySelector('button[type=submit]'))">
                     {% csrf_token %}
                     <input type="hidden" name="grupo" value="{{ grupo }}">
                     <input type="hidden" name="fecha" value="{{ fecha|date:'Y-m-d' }}">
