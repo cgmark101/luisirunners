@@ -1,0 +1,1777 @@
+[
+{
+  "model": "gestion.grupo",
+  "pk": 1,
+  "fields": {
+    "nombre": "Juniors",
+    "descripcion": ""
+  }
+},
+{
+  "model": "gestion.grupo",
+  "pk": 2,
+  "fields": {
+    "nombre": "Juveniles",
+    "descripcion": ""
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$EyWotTM9KXXwVhoPbe0ovL$hjGmR8vfFYAqCKqRZYQtnAFHzUG5zFDrtUC/KFOnHK0=",
+    "last_login": "2025-09-08T14:56:15.709Z",
+    "is_superuser": true,
+    "username": "marcos",
+    "first_name": "Marcos",
+    "last_name": "Yeguez",
+    "email": "marcos2687@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-04-20T18:50:53Z",
+    "grupo": null,
+    "uuid": "4b35497b-dee0-421f-9da0-fa7c9318fb83",
+    "rol": "ADMINISTRADOR",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$hWTpllo5v7uoxdCm2XtV9j$NwG3IZRB9CwJgdXVZjceFDg56QQ8WxfhFWmCboIKnFE=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "ethan",
+    "first_name": "Ethan",
+    "last_name": "Yeguez",
+    "email": "ethan@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-04-20T18:53:54Z",
+    "grupo": 1,
+    "uuid": "7ea62336-7d3d-4453-b8bc-65c758254855",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$FKVfox8NNIkNBklENkZoTy$LnW1zoD95/tOsiSSzIOOtAOASI11PLmSDAHIqEXXtkk=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "yurimar",
+    "first_name": "Yurimar",
+    "last_name": "Perez",
+    "email": "ymperezb@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-04-20T18:54:14Z",
+    "grupo": 2,
+    "uuid": "2d6aba43-79bc-43c4-9774-8909d8632ccc",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$GWaTmaRVyCvWBQoAG6LKrl$NTWpUn5lGK9G+AT5iEfaQ3kZH+cNGvrotL6KBTd+p3E=",
+    "last_login": "2025-09-07T19:44:53.535Z",
+    "is_superuser": true,
+    "username": "slara",
+    "first_name": "Severo",
+    "last_name": "Lara",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-04-21T00:19:30Z",
+    "grupo": null,
+    "uuid": "bd08630f-67b0-4dee-acd3-bd3269e533db",
+    "rol": "ADMINISTRADOR",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$562UhEKgfJflbQOfV9Ekf0$1W2URg/bwv8PXcUqiWhBCpW/kpFeSDC18Y3/atEy0U8=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "kike",
+    "first_name": "Enrique",
+    "last_name": "Gomez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-04-22T14:00:53Z",
+    "grupo": 2,
+    "uuid": "24f54694-ee66-4d44-96e2-b26abf797638",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$U59DlntXX6nJIDpXGd52m7$lxlPHKhenCZtW71/PeVsoJUbENTiCsff/SUEGFOb2uQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "santi",
+    "first_name": "Santiago",
+    "last_name": "Gonzalez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-04-22T14:06:39Z",
+    "grupo": 2,
+    "uuid": "ab6d5be6-1488-4215-a67a-43ad5cd6e81a",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$SoIlHeoVoJApl1bMCzquXl$jm1T//HEcUYT7rnn9E+q9G978tm87fq81Ez6VIuxRZc=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "luisi",
+    "first_name": "Luisa",
+    "last_name": "Gonzalez",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-09-06T23:45:29Z",
+    "grupo": null,
+    "uuid": "684d07da-d2d0-49e7-9749-30084889b5df",
+    "rol": "ADMINISTRADOR",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 8,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$xffSkMKtIIKE0zAmclEgD1$89w2tcjZXg8TvgyVcxpxM+q4w0U65BKPpVO0at05H1Q=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "jesuslobo",
+    "first_name": "Jesus",
+    "last_name": "Lobo",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-06T23:46:40Z",
+    "grupo": 2,
+    "uuid": "70fa950d-b5f6-4584-81c2-de2d88135850",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 12,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$mnW0J1CvyVjXOwRDF7Dhxt$/UlFChXryqx8bi9mpKoYOskFveWayB7mjBwJ5NnfDdo=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "mcabrera",
+    "first_name": "Moises",
+    "last_name": "Cabrera",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T00:50:42Z",
+    "grupo": 2,
+    "uuid": "612f93aa-bf56-4645-804c-ed09a678bab1",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 13,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$dpufaRLLGZF623RmPbyPH3$QoYma7efizrKYVl56bawtjWY9QLufJIVdAQhQCQPZA8=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "aadrian",
+    "first_name": "Angelo",
+    "last_name": "Adrian",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T00:54:02Z",
+    "grupo": 2,
+    "uuid": "d402dc22-52c1-4cf8-9e64-f390509e3d35",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 14,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$p1dCp5thNNdTxyW8EEHKIo$1mDCPx3gh0MaIVJGqZhpV51o2dbuz9knTEQAm2QdRfg=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "shernandez",
+    "first_name": "Santiago",
+    "last_name": "Hernandez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T00:55:14Z",
+    "grupo": 2,
+    "uuid": "27cf7853-85a4-4b67-9e1a-a92a1b1e6c53",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 15,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$SHz56JP8BvVPZNqIChSQcX$fuGN+wplckZYm0ZKaE9gHcZUqTs9/zWZHanzdF3nSfQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "msantamaria",
+    "first_name": "Miguel",
+    "last_name": "Santamaria",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T00:56:49Z",
+    "grupo": 2,
+    "uuid": "5e3da983-ad83-4706-9040-e2bc89988399",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 16,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$eVpR58Omrm3QW1673IVuwj$DKFYWPtRPtYRY4dLNDZRzNdOiies0E3ugup7M1pLc7g=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "nruiz",
+    "first_name": "Natanael",
+    "last_name": "Ruiz",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T00:57:52Z",
+    "grupo": 2,
+    "uuid": "798d3642-afb0-4bba-ac1a-62b99d59e2b1",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 17,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$rrNRp7WF2p3nKBL42WBoq6$dtEU27ybhkS3MeGh8qzblX1ahOjeVojOU2ldUKcLBoY=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "aperoza",
+    "first_name": "Arantza",
+    "last_name": "Peroza",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T00:58:44Z",
+    "grupo": 2,
+    "uuid": "a366c852-ec38-43ab-964f-ec4b44f07e5c",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 18,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$f6Bunn3VWxFSrKvwNHMiSm$dgxe1nRrxklcmUnTrinaMwaVZc28vVIuxwe5YJ+drWc=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "avillegas",
+    "first_name": "Ashley",
+    "last_name": "Villegas",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T00:59:36Z",
+    "grupo": 2,
+    "uuid": "00317ca8-6e22-4d42-beba-2309c044c59d",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 19,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$zRbQcKM7XU0L37jnxMpsMw$nWgv1+IewmIXLqztZk9J0wRK1Hb6Y2PJKRMedQWNs7c=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "onigro",
+    "first_name": "Oriana",
+    "last_name": "Nigro",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:00:33Z",
+    "grupo": 2,
+    "uuid": "19c16e74-8a2d-40c0-9774-4825a9e7b662",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 20,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$pEtnLxy2bTo86E43qIxdZJ$6H/3u4GXZiO7mXW3qd7gHW31Na1/gdpgB2mue80Mnyk=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "ape±a",
+    "first_name": "Arantza",
+    "last_name": "Pe±a",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:01:26Z",
+    "grupo": 2,
+    "uuid": "4efd30ae-cdfe-404e-8f61-cab4b3fda357",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 21,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$pHk4VwlmUtUebYq082ajzo$WxYu42MwIvocBQOGlwmbEn3+S5RmXi0liXwWKLMzsHo=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "adiaz",
+    "first_name": "Andrea",
+    "last_name": "Diaz",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:02:18Z",
+    "grupo": 2,
+    "uuid": "35f66d44-31a5-49ee-82f0-94f74005ee36",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 22,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$fYlsgW6yJlK8OnLDSKwzh1$pK6Gvg/xk1w/tbSwlSLmpLc3sOmd23Ai+f946AP+7mI=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "inavarro",
+    "first_name": "Isabella",
+    "last_name": "Navarro",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:03:04Z",
+    "grupo": 2,
+    "uuid": "9ebe4d7f-74e4-4d9b-a579-c195382dfd32",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 23,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$2Fi76zfx7tZvrA10FdgYT6$llmcPb3S7Z2DAnbFmb+gDf4Ijxd7DgDoN/Amiyqq0Qk=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "imatson",
+    "first_name": "Isabella",
+    "last_name": "Matson",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:04:17Z",
+    "grupo": 2,
+    "uuid": "f8ea1d2b-bda6-41b3-927e-854130f9531f",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 24,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$S4c1XCHrnwtqaGJU4EiZYC$Z3Xxp9Q7OaA0AGOcE3O6++v7zKhQqZHf/K7wDqhdRx4=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "iespitia",
+    "first_name": "Isabella",
+    "last_name": "Espitia",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:05:16Z",
+    "grupo": 2,
+    "uuid": "23e8ff20-fe12-4d42-8db8-3f4f7805bf46",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 25,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$wFc0W0yKsafsXp1oSObygc$fKbQ3dvW6O4sopDL81WxmjzilXzgHd153UwMWIxHlDU=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "airiarte",
+    "first_name": "Asaael",
+    "last_name": "Iriarte",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:06:10Z",
+    "grupo": 2,
+    "uuid": "6ffaa192-01bb-4ee8-a2b9-0c9202552d97",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 26,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$Zxd8Gaum7IAB83sx6G2buP$OfFvN6xw/W7snbds71FpBv7q9O1uQ3MGBK7X+oCJqbI=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "scordero",
+    "first_name": "Sofia",
+    "last_name": "Cordero",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:07:05Z",
+    "grupo": 2,
+    "uuid": "271f39c6-edbe-4e55-b887-60e9b04796ec",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 27,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$iPdOJwwlwmcsBfiyaqqUpV$Y851qGURwzcNhCMWPF9cWYDZOdxXAaOZxuf3IDIeYA4=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "ndiaz",
+    "first_name": "Nicolle",
+    "last_name": "Diaz",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:07:57Z",
+    "grupo": 2,
+    "uuid": "5b19b457-9ba3-4544-9d9b-f44ecb581802",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 28,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$Yy6DwIfGUkqmshM63tR4rC$2zXZOfnTaWQXsvpYq7OCRVQ9Psm/RXKUOWqBt8nIe60=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "asdiaz",
+    "first_name": "Ashley",
+    "last_name": "Diaz",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:08:54Z",
+    "grupo": 2,
+    "uuid": "9e8edf4e-9326-4997-b0ab-d33990f67463",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 29,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$GlO8SR6QyHnSEJa1LnhDSs$wKE+1ROY7N4wDhE9jGVlj/VB+4Qd/8uurdaR1AcPb0c=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "mfosorio",
+    "first_name": "Maria Fernanda",
+    "last_name": "Osorio",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:09:57Z",
+    "grupo": 2,
+    "uuid": "fa1bc54e-2036-4b1c-83db-d5f616d0f774",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 30,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$vFCl0HuJ4fbr2WanAT7wyL$pQBm+FpfhUYouazxMOnuBnpHeV3yQTPY5tA76wKLyLg=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "aadameo",
+    "first_name": "Anthony",
+    "last_name": "Adameo",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:11:08Z",
+    "grupo": 2,
+    "uuid": "3cb133d6-cbb9-4cde-b3e4-4da8d489afff",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 31,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$weTEeMjHrQ1qdZ1EgFtWP2$7OPfcsIUdeR0X8rsm9tFtj0OrFuAs7Vdmpp9qY+zYJs=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sguillen",
+    "first_name": "Sarai",
+    "last_name": "Guillen",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:12:03Z",
+    "grupo": 2,
+    "uuid": "c2c4bc0d-086a-4773-b29b-d12ea845be00",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 32,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$Ic7yitjaGMxPFc98qL3toy$lB99zlF8U+kl3/RaEz5Krvj4heeZ/tL+lCHyW1rMSgQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "gadrian",
+    "first_name": "Giuliano",
+    "last_name": "Adrian",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:13:26Z",
+    "grupo": 2,
+    "uuid": "e81f8a08-ab5d-46cc-a2c4-897fb445386b",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 34,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$L47XqPIx2IvqRUhj57vvoL$lT9V3WqFrI4P6VG4boRCLt/8IJxmTum92gLkegWodqQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "vcarvajal",
+    "first_name": "Valeria",
+    "last_name": "Carvajal",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:17:41Z",
+    "grupo": 2,
+    "uuid": "50347f9a-6337-43fb-b59a-34798defc889",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 35,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$u9qxH8zZ9Y5o2n3tNHLrpi$BJlZzDU9cMYqNbWMc8i0lkVFMSlp+8Ax3BWhWRcdbVo=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "erincones",
+    "first_name": "Emilio",
+    "last_name": "Rincones",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:18:29Z",
+    "grupo": 2,
+    "uuid": "c362af77-8485-4f7e-b4b5-2af541b398df",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 36,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$vjIcnDoAjzydFqLUSW42Qz$9vqcHkE4WeMcry0Ky5aap2SSCQLrrbI7F2YPWIe9Q8I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "jgonzalez",
+    "first_name": "Jaribson",
+    "last_name": "Gonzalez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:19:28Z",
+    "grupo": 2,
+    "uuid": "430f4608-a6e2-438c-9e4c-25ba267f9cf7",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 37,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$BfmeGZb3TSbPqVZvCnyXPK$MOeks9kIH7OUnTyUXdH4svsbxNaU5myFLsbj0fxjY08=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "jagonzalez",
+    "first_name": "Jarielis",
+    "last_name": "Gonzalez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:20:17Z",
+    "grupo": 2,
+    "uuid": "cd690a71-987b-4a91-8659-46bbe8aee15a",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 38,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$sxSyWmWykL4xa27wBKFCEl$E7HCRbNnWNtoBMTbQHqeICnaAICohjTUL0Fub6O1MRQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sramos",
+    "first_name": "Sebastian",
+    "last_name": "Ramos",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:22:20Z",
+    "grupo": 2,
+    "uuid": "802b71f6-0498-481b-8cdd-d757cd6c9be1",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 39,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$tV0nFGP88mJa5nTjYA4TEx$3eSVsVH8BlWTJRDAByPj5WBKVRp5ApiYhGIlvPBaL0Y=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "svelasquez",
+    "first_name": "Sebastian",
+    "last_name": "Velasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:23:10Z",
+    "grupo": 2,
+    "uuid": "512a0737-0f3a-44b0-909f-493843205117",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 40,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$V9jmi2h1wHtJbmIPCicqht$3CPR6l3CxL9LU+lfQJ/WrHKdoZFQiCgI9OCMjTInpbs=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "adelgado",
+    "first_name": "Amanda",
+    "last_name": "Delgado",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:24:01Z",
+    "grupo": 2,
+    "uuid": "a88ef549-a9d0-4512-8430-3946721a0a86",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 41,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$z4mixRVbQhGDiVx8uGnlqV$zBWyIVMeTNtO3qAZlHC3rUC3OGdTxh4Va/79s4FmkKM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "nmarcano",
+    "first_name": "Nellmar",
+    "last_name": "Marcano",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:24:52Z",
+    "grupo": 1,
+    "uuid": "18b00a24-d9eb-4fbc-b41d-39c9e553710b",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 42,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$TApTpWzEBOoR5cXg90UhMK$ttCdjDsVUnItFyIk3zB3Oo9RCMo5lRYTZwCIlsJWYLk=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "arodriguez",
+    "first_name": "Angel",
+    "last_name": "Rodriguez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:25:42Z",
+    "grupo": 1,
+    "uuid": "d09cd3ca-dabb-487d-8ef1-64d21e42c4d7",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 43,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$QBfJ57CRvULqP5TOpAWQzs$AwhkmlgWu+NbEL0xJqn4prae9NoOiIvaU+Svg+f2mXk=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "mgonzalez",
+    "first_name": "Mathias",
+    "last_name": "Gonzalez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:26:42Z",
+    "grupo": 1,
+    "uuid": "60d12395-c2e3-4bd2-87d4-6d2a7a9630f1",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 44,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$sGx7yPx1vbga2QPWKSfuqr$cUulLBV+pvsO8xeZX0ZTSrMCgtFVc9KYjnfzEDW86og=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "dbolivar",
+    "first_name": "Diorlan",
+    "last_name": "Bolivar",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T01:27:29Z",
+    "grupo": 1,
+    "uuid": "4aaeb544-611f-4eeb-9322-b3506adca2d5",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 45,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$h8XOmNr5aPBhpRYSNx7BDR$xhPi+hY0Kxy7a9urvpAYVjKYbVIVcHs+29UJ5u8XFIQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "bcurcio",
+    "first_name": "Barbara",
+    "last_name": "Curcio",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T03:42:23Z",
+    "grupo": 1,
+    "uuid": "177f902f-7387-4a81-afa0-d1784fc17a01",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 46,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$ooYH8OifWgcq0IjQDI7hYe$Tx/peCQQMRgTP8fLVm7MHh8iXOgMrqbnasEXJSA0tGM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "fcurcio",
+    "first_name": "Frida",
+    "last_name": "Curcio",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T03:43:22Z",
+    "grupo": 1,
+    "uuid": "60a698a0-96a3-4cc8-b3f8-23c6800b176e",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 47,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$vnQrNPH7Lvfdv1ps77AdvF$uVkvyjbhlWxqgo9txGnNwHJVic1hDo0QOQclgA3ql7U=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "rpariguan",
+    "first_name": "Rosmielip",
+    "last_name": "Pariguan",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T03:44:17Z",
+    "grupo": 1,
+    "uuid": "1f9ed3b8-ed4a-4f19-b1a4-dca810b1423d",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 48,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$PXn2VBJSMcyLFtzM0FBP1I$4iH55WXR8OUZj5S6WSsWYQDFeOGNbW70xDLENYCNcz0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "ymartinez",
+    "first_name": "Yosef",
+    "last_name": "Martinez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T03:45:21Z",
+    "grupo": 1,
+    "uuid": "b1fcd3d3-d5ca-433a-85c8-0a36d8845f54",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 49,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$AGrRgJnQ5haucOK0favZ5k$B5+pGzY8Is0+k4/r6H09p2Qcv/AQV7RS9f9xwbt+aa4=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "mortega",
+    "first_name": "Maria Victoria",
+    "last_name": "Ortega",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T03:46:35Z",
+    "grupo": 1,
+    "uuid": "5b9a5ea8-1640-49e7-990d-3363565e5183",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 50,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$Dgqi8OWeiwGgX2vwSv2CT3$EB4xb5yH9UdDDxX4FnTFi3T2W4cY35lTQl2hkEEYDfY=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "navila",
+    "first_name": "Nathalia",
+    "last_name": "Avila",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T03:47:30Z",
+    "grupo": 1,
+    "uuid": "0036dea3-8b06-4215-aa4a-3b45b997ee30",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 51,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$b7zadvtvsklHgEbU8bsQbO$BASz42XypzrLxCKXzPWz6cnqdsHcr0xbWb0h5m7gT6k=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "lpi±a",
+    "first_name": "Leticia",
+    "last_name": "Pi±a",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T03:48:18Z",
+    "grupo": 1,
+    "uuid": "84a7abcf-320f-462e-a987-e37ad9d1fb0a",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 52,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$n8FhMG3Qv2Schq0zwwznTp$YGhJ/CY9OwUQ+tcXzoqxByqIJQwSyAaSyxRrR0mUbDo=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "lastudillo",
+    "first_name": "Luciano",
+    "last_name": "Astudillo",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T03:49:14Z",
+    "grupo": 1,
+    "uuid": "8138bddb-73ed-4b07-bae7-9d4ba2e1b781",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 53,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$lak6vF0VMLf6CcRg0hmkaO$gc2mgSK7IJIL0GWocbBOHzx1pGI3gmJcxQzVmCV1Paw=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "ealvarez",
+    "first_name": "Ema",
+    "last_name": "Alvarez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T03:50:06Z",
+    "grupo": 1,
+    "uuid": "774209b6-8cb8-4f15-b956-bdec49c46604",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 54,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$fTCZzfLXwxP4StfZTsZfCm$wRFzalV36IInajCV1zdegC8ozDsxAXOCSGCdQsDfDqg=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "mvivas",
+    "first_name": "Maria Fernanda",
+    "last_name": "Vivas",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T03:51:58Z",
+    "grupo": 1,
+    "uuid": "fc7fc891-16a2-458d-b0e7-c771c62fa5c9",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 55,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$O0GBnNK9zfRr9jjba69AGh$AXrm2OeEMeZpMmv4+CMZW9M3z2Twz2eiwaFlgOzAemo=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "gdiaz",
+    "first_name": "Gustavo",
+    "last_name": "Diaz",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T03:52:45Z",
+    "grupo": 1,
+    "uuid": "7c2b8971-2e31-4614-8d62-ec2694f4b550",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 56,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$PTw3D6dRiMkazEzRHyRVWl$khGdnlaDq66ZUkzMlcHRFir7JCijlKL992xRi0ZLNM8=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "suga",
+    "first_name": "Sofia",
+    "last_name": "Uga",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T03:53:27Z",
+    "grupo": 1,
+    "uuid": "8e0b03df-7ba3-4251-b4ba-08e98ba131b9",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 57,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$9oPobq988IWJRJDM7j79Eh$qdD9huF+DxwWijV3l6VFOeqvHzaeVTo6Eq9KgdqXpiY=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "aarcila",
+    "first_name": "Arianna",
+    "last_name": "Arcila",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T03:54:12Z",
+    "grupo": 1,
+    "uuid": "4695d06a-4b61-4016-8485-e449ec80755d",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 58,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$MzPkWHR5R8OIYqHQP8irYd$EtAl6L6ItKVSc88Us4hpxibUfDPRfJOw8/a869MQvSA=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "marcila",
+    "first_name": "Mariangel",
+    "last_name": "Arcila",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T03:55:04Z",
+    "grupo": 1,
+    "uuid": "4958afe5-dc29-429f-9ee3-3692088ebd99",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 59,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$YSg17DxQSdOn1Hw9pkKwuc$V+KqDejP5Von8VudqoFuoDGPNhSwWJqogHA2AqeB6jM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "lfuentes",
+    "first_name": "Luis",
+    "last_name": "Fuentes",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T03:56:05Z",
+    "grupo": 1,
+    "uuid": "52f982c4-8dc1-4eab-824b-d3b3d453a4e1",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 60,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$KX1KOXZj0Nb29stbDUPtk1$HdwiK18T9RixRSjGWekNtRlFofEB6QAG3w8LCOsnl2A=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "aortega",
+    "first_name": "Alexis",
+    "last_name": "Ortega",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T03:56:52Z",
+    "grupo": 1,
+    "uuid": "0cae0ea2-6464-4589-b3e0-2b5110312b4d",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 61,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$8gs1I1djfA8P4TAmlmDOpf$EuHFYtZFKAQ8zw89Jn5SkHWc912CM5olXEw2ac2Fd2Q=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "lortega",
+    "first_name": "Luis David",
+    "last_name": "Ortega",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T03:57:37Z",
+    "grupo": 1,
+    "uuid": "2b7160a4-353f-4be8-a1f5-76617b5072cc",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 62,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$4i4eb3qejV1MB4kye5oWel$trRYMjWAEe12qRWx/XtxiFK2Fv7K4RCWKnSDYNE2rWc=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "mespinoza",
+    "first_name": "Michelle",
+    "last_name": "Espinoza",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T03:58:25Z",
+    "grupo": 1,
+    "uuid": "2b12953c-1c8e-4956-bef5-3e56c44a935e",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 63,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$yYlMZOq2HoAgJQsBWTES9s$AdhMz/5bRrFjbYzNoyETvqn34u2iZDXRzKH0wAl5xds=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "gbacca",
+    "first_name": "Gleymar",
+    "last_name": "Bacca",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T03:59:11Z",
+    "grupo": 1,
+    "uuid": "4c5f6d75-fcdf-45c2-b8b9-4c864a52be9e",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 64,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$iyAvYaeBY8INQNx0EbozND$RmL8W9Va+dSKWSx6yGgs+zqCgXYlCAq/RvsfiuiuL3c=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "aespa±a",
+    "first_name": "Aquiles",
+    "last_name": "Espa±a",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T04:00:00Z",
+    "grupo": 1,
+    "uuid": "6f469930-16f2-46d2-80ea-5293dc4b7617",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 65,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$MJpJNIa6mYyEMwv3zz0rHI$qFBGd/lYliWa/EGvIhsOlxBsE+oyquyIk/qTqp/JSs0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "alrodriguez",
+    "first_name": "Alessandra",
+    "last_name": "Rodriguez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T04:01:37Z",
+    "grupo": 1,
+    "uuid": "4a177159-e2ef-42b7-af49-46f9d908d200",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 66,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$JgeuFUhnxfZOCGq7er0hEb$kCwaVmo296ngqHhkCPchFdmdSyOIY5ZNj066pNJgJ2U=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "alaiaLR",
+    "first_name": "Alaia",
+    "last_name": "LuisiRunners",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T04:02:55Z",
+    "grupo": 1,
+    "uuid": "71fe5e55-8ebe-4528-99aa-34ca6d86ed68",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 67,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$OxnpVhlTT06E8WCOE9B0Qx$DJ3XnmPsVzoWXglzygd5rUNUu3aVhyId+8yj9+gokbc=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "avidal",
+    "first_name": "Abril",
+    "last_name": "Vidal",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T04:03:59Z",
+    "grupo": 1,
+    "uuid": "6836ad51-ae68-4202-aaca-cd45e1b523e0",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 68,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$d3Ca2xBBiZaBHMiqM5jIpL$tvM9u2SMzOIv5Mf9EoVFXI2wZRI+zh5h6uV2/b0vG0s=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "ezambrano",
+    "first_name": "Ema",
+    "last_name": "Zambrano",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T04:04:45Z",
+    "grupo": 1,
+    "uuid": "43a314a1-8175-4dfa-a07f-c70ff9329c5d",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 69,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$gz89vVSRhflfAHRn4lAPTX$yb7+b84t9tGUKgNIGEUm+z4IwqwbA8v3e2iVlODMePY=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "manuelisLR",
+    "first_name": "Manuelis",
+    "last_name": "LuisiRunners",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T04:05:56Z",
+    "grupo": 1,
+    "uuid": "be6890a1-3119-49bd-b19a-a309ed545824",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 70,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$HN5HbDzKxGHcHOJHYgL16k$6EGLuz9VYsbuyFl/QyuXAxssyyVsJmFCOWHo1DuzUGw=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "nalejandro",
+    "first_name": "Nicolas",
+    "last_name": "Alejandro",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T04:06:42Z",
+    "grupo": 1,
+    "uuid": "8059023a-ed7f-4275-aec4-6620e898d5da",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 71,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$2UJLYLnjlY4f8cFUVtndN1$EgBacGJLpgDGqH/Xrr1zHMVrDyjnya7peQdoURqy4lE=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "avperez",
+    "first_name": "Andrea Victoria",
+    "last_name": "Perez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T04:07:37Z",
+    "grupo": 1,
+    "uuid": "8aa47583-241c-4446-bce1-76ff6fe5ab74",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 72,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$EHcEfBRasEdakwKFg1Aa7I$28B0XNAD+aTbtx7bMWNBFuGqfoqRTy3a3nPzFc9XsvQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "ayepez",
+    "first_name": "Antonella",
+    "last_name": "Yepez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T04:08:29Z",
+    "grupo": 1,
+    "uuid": "5b5bfeb7-c97b-4fcc-bf5a-cc1b931222a5",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.usuario",
+  "pk": 73,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$99pEYev4F8T1L6trvbmyb3$+wodEJNDrXC51savZWb/Cjk5pJdF83miegYQPTi41gA=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "mrodriguez",
+    "first_name": "Mia de los Angeles",
+    "last_name": "Rodriguez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-07T04:10:19Z",
+    "grupo": 1,
+    "uuid": "343eaf18-d131-4d99-b259-dcfeb577509d",
+    "rol": "ALUMNO",
+    "inactivo_desde": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "gestion.asistencia",
+  "pk": 1,
+  "fields": {
+    "alumno": [
+      "yurimar"
+    ],
+    "fecha": "2025-04-20",
+    "presente": true,
+    "nota": ""
+  }
+},
+{
+  "model": "gestion.asistencia",
+  "pk": 2,
+  "fields": {
+    "alumno": [
+      "ethan"
+    ],
+    "fecha": "2025-04-20",
+    "presente": false,
+    "nota": ""
+  }
+},
+{
+  "model": "gestion.asistencia",
+  "pk": 3,
+  "fields": {
+    "alumno": [
+      "yurimar"
+    ],
+    "fecha": "2025-04-22",
+    "presente": false,
+    "nota": ""
+  }
+},
+{
+  "model": "gestion.asistencia",
+  "pk": 4,
+  "fields": {
+    "alumno": [
+      "kike"
+    ],
+    "fecha": "2025-04-22",
+    "presente": false,
+    "nota": ""
+  }
+},
+{
+  "model": "gestion.asistencia",
+  "pk": 5,
+  "fields": {
+    "alumno": [
+      "ethan"
+    ],
+    "fecha": "2025-04-22",
+    "presente": false,
+    "nota": ""
+  }
+},
+{
+  "model": "gestion.asistencia",
+  "pk": 6,
+  "fields": {
+    "alumno": [
+      "santi"
+    ],
+    "fecha": "2025-04-22",
+    "presente": false,
+    "nota": ""
+  }
+},
+{
+  "model": "gestion.asistencia",
+  "pk": 7,
+  "fields": {
+    "alumno": [
+      "ethan"
+    ],
+    "fecha": "2025-09-05",
+    "presente": true,
+    "nota": ""
+  }
+},
+{
+  "model": "gestion.asistencia",
+  "pk": 8,
+  "fields": {
+    "alumno": [
+      "ethan"
+    ],
+    "fecha": "2025-09-06",
+    "presente": true,
+    "nota": ""
+  }
+},
+{
+  "model": "gestion.asistencia",
+  "pk": 9,
+  "fields": {
+    "alumno": [
+      "kike"
+    ],
+    "fecha": "2025-09-06",
+    "presente": true,
+    "nota": ""
+  }
+},
+{
+  "model": "gestion.asistencia",
+  "pk": 10,
+  "fields": {
+    "alumno": [
+      "santi"
+    ],
+    "fecha": "2025-09-06",
+    "presente": true,
+    "nota": ""
+  }
+},
+{
+  "model": "gestion.asistencia",
+  "pk": 11,
+  "fields": {
+    "alumno": [
+      "yurimar"
+    ],
+    "fecha": "2025-09-06",
+    "presente": false,
+    "nota": ""
+  }
+},
+{
+  "model": "gestion.asistencia",
+  "pk": 12,
+  "fields": {
+    "alumno": [
+      "marcila"
+    ],
+    "fecha": "2025-09-07",
+    "presente": true,
+    "nota": ""
+  }
+},
+{
+  "model": "gestion.asistencia",
+  "pk": 13,
+  "fields": {
+    "alumno": [
+      "jesuslobo"
+    ],
+    "fecha": "2025-09-07",
+    "presente": true,
+    "nota": ""
+  }
+},
+{
+  "model": "gestion.asistencia",
+  "pk": 14,
+  "fields": {
+    "alumno": [
+      "nalejandro"
+    ],
+    "fecha": "2025-09-07",
+    "presente": true,
+    "nota": ""
+  }
+},
+{
+  "model": "gestion.asistencia",
+  "pk": 15,
+  "fields": {
+    "alumno": [
+      "ethan"
+    ],
+    "fecha": "2025-09-08",
+    "presente": false,
+    "nota": ""
+  }
+},
+{
+  "model": "gestion.asistencia",
+  "pk": 16,
+  "fields": {
+    "alumno": [
+      "nalejandro"
+    ],
+    "fecha": "2025-09-08",
+    "presente": false,
+    "nota": ""
+  }
+},
+{
+  "model": "gestion.asistencia",
+  "pk": 17,
+  "fields": {
+    "alumno": [
+      "ealvarez"
+    ],
+    "fecha": "2025-09-08",
+    "presente": false,
+    "nota": ""
+  }
+},
+{
+  "model": "gestion.sessionday",
+  "pk": 1,
+  "fields": {
+    "grupo": 1,
+    "fecha": "2025-09-08",
+    "active": false
+  }
+},
+{
+  "model": "gestion.pago",
+  "pk": 2,
+  "fields": {
+    "alumno": [
+      "ethan"
+    ],
+    "fecha_pago": "2025-04-19",
+    "numero_referencia": "75839374",
+    "banco_emisor": "0102",
+    "tipo_transaccion": "PAGO_MOVIL",
+    "captura_comprobante": ""
+  }
+},
+{
+  "model": "gestion.pago",
+  "pk": 3,
+  "fields": {
+    "alumno": [
+      "santi"
+    ],
+    "fecha_pago": "2025-04-20",
+    "numero_referencia": "123456789000000",
+    "banco_emisor": "0102",
+    "tipo_transaccion": "PAGO_MOVIL",
+    "captura_comprobante": ""
+  }
+}
+]

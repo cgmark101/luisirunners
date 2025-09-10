@@ -1,0 +1,83 @@
+{% extends "_base_layout.html" %}
+{% load i18n %}
+{% load allauth account %}
+{% load bootstrap5 %}  {# Cargamos la librería de Bootstrap #}
+
+{% block head_title %}
+    {% trans "Sign In" %}
+{% endblock head_title %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    {# Título #}
+                    <h1 class="h3 mb-4 text-center">{% trans "Sign In" %}</h1>
+
+                    {# Mensaje de registro #}
+                    {% if not SOCIALACCOUNT_ONLY %}
+                        {% comment %} <p class="text-center mb-4">
+                            {% blocktranslate trimmed %}
+                                If you have not created an account yet, please
+                                <a href="{{ signup_url }}" class="link-primary">sign up</a> first.
+                            {% endblocktranslate %}
+                        </p> {% endcomment %}
+
+                        {# Formulario de Login #}
+                        {% url 'account_login' as login_url %}
+                        <form method="post" action="{{ login_url }}" class="mb-3">
+                            {% csrf_token %}
+                            
+                            {# Campos del formulario con estilos Bootstrap #}
+                            {% bootstrap_form form show_label=False %}
+                            
+                            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+
+                            {# Botón de Submit #}
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    {% trans "Sign In" %}
+                                </button>
+                            </div>
+                        </form>
+                    {% endif %}
+
+                    {# Opciones adicionales (Passkey, Login por código) #}
+                    {% if LOGIN_BY_CODE_ENABLED or PASSKEY_LOGIN_ENABLED %}
+                        <hr class="my-4">
+                        
+                        <div class="d-grid gap-2">
+                            {% if PASSKEY_LOGIN_ENABLED %}
+                                <button type="submit" form="mfa_login" id="passkey_login" class="btn btn-outline-primary">
+                                    {% trans "Sign in with a passkey" %}
+                                </button>
+                            {% endif %}
+                            
+                            {% if LOGIN_BY_CODE_ENABLED %}
+                                <a href="{{ request_login_code_url }}" class="btn btn-outline-primary">
+                                    {% trans "Send me a sign-in code" %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {# Login con redes sociales #}
+                    {% if SOCIALACCOUNT_ENABLED %}
+                        <hr class="my-4">
+                        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_body %}
+    {{ block.super }}
+    {% if PASSKEY_LOGIN_ENABLED %}
+        {% include "mfa/webauthn/snippets/login_script.html" with button_id="passkey_login" %}
+    {% endif %}
+{% endblock %}

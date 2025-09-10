@@ -1,0 +1,14 @@
+{% extends '_base_layout.html' %}
+{% load bootstrap5 %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h1 class="mb-3">Registro Exitoso</h1>
+            <p class="lead">El pago ha sido registrado correctamente.</p>
+            <a href="{% url 'portal_index' %}" class="btn btn-secondary mt-3">Regresar</a>
+            <a href="{% url 'registrar_pago' %}" class="btn btn-success mt-3">Agregar Otro</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,52 @@
+{% load django_htmx %}
+{% load bootstrap5 %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}Panel Administrativo | LuisiRunners{% endblock %}</title>
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% htmx_script %}
+</head>
+<body>
+    {# Navbar superior #}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">LuisiRunners</a>
+            {% if user.is_authenticated %}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == "portal_index" %}active{% endif %}" href="{% url "portal_index" %}">Panel</a></li>
+                    {% comment %} <li class="nav-item"><a class="nav-link" href="#">Usuarios</a></li> {% endcomment %}
+                    <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == "ver_grupos" %}active{% endif %}" href="{% url "ver_grupos" %}">Asistencias</a></li>
+                    <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == "registrar_pago" %}active{% endif %}" href="{% url "registrar_pago" %}">Pagos</a></li>
+                </ul>
+                <div class="d-flex">
+                    {% if user.is_superuser or user.rol == 'ADMINISTRADOR' %}
+                        <a class="btn btn-outline-warning me-2" href="/admin" title="Panel de administración">Admin</a>
+                    {% endif %}
+                    <a class="btn btn-outline-light me-2" href="{% url 'account_logout' %}">Cerrar Sesion</a>
+                </div>
+            </div>
+            
+            {% endif %}
+        </div>
+    </nav>
+    {# Layout principal: Sidebar y contenido #}
+    <div class="container-fluid">
+        <div class="row">
+            
+            {# Área principal de contenido #}
+            <main class="col-md-9 col-lg-10 mx-auto px-md-4">
+                {% block content %}
+                {% endblock %}
+            </main>
+        </div>
+    </div>
+</body>
+</html>

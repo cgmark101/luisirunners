@@ -1,0 +1,126 @@
+{# Fragmento reutilizable para la sección diaria que puede ser reemplazada por HTMX tras activar la sesión #}
+<div id="daily-attendance-fragment">
+    <div class="mb-2">
+        {# Añadimos botón de descarga diaria; se asume que la vista recibe `grupo` y `session_active` en el contexto #}
+    {% if grupo %}
+        {% if session_active %}
+            <a href="{% url 'download_asistencias_diaria' grupo=grupo fecha=fecha|date:'Y-m-d' %}?format=xlsx" class="btn btn-outline-success btn-sm">Descargar Reporte Diario</a>
+            {# Botón de desactivar visible sólo para administradores (superuser o rol ADMINISTRADOR) #}
+            {% if request.user.is_superuser or request.user.rol == 'ADMINISTRADOR' %}
+                <form hx-post="{% url 'deactivate_session_day' %}" hx-target="#daily-attendance-fragment" hx-swap="outerHTML" method="POST" class="d-inline ms-2" onsubmit="(function(btn){btn.disabled=true; btn.innerText='Desactivando...';})(this.querySelector('button[type=submit]'))">
+                    {% csrf_token %}
+                    <input type="hidden" name="grupo" value="{{ grupo }}">
+                    <input type="hidden" name="fecha" value="{{ fecha|date:'Y-m-d' }}">
+                    <button type="submit" class="btn btn-outline-danger btn-sm">Desactivar sesión</button>
+                </form>
+            {% endif %}
+        {% else %}
+            <button type="button" class="btn btn-outline-secondary btn-sm" disabled title="La sesión no está activa. Activa la sesión para descargar el reporte">Descargar Reporte Diario</button>
+        {% endif %}
+    {% endif %}
+    </div>
+    {# Buscador cliente por nombre que filtra las filas ya renderizadas #}
+    <div class="mb-3">
+        <input id="attendance-search" type="search" class="form-control form-control-sm" placeholder="Buscar por nombre..." aria-label="Buscar por nombre">
+    </div>
+    {# Mostrar banner de activación de sesión si no está activa. 'session_active' debe estar en el contexto. #}
+    {% if grupo and not session_active %}
+    <div class="alert alert-warning d-flex justify-content-between align-items-center">
+        <div>La sesión de entrenamiento para este día está inactiva. ¿Deseas activarla para registrar asistencias y que aparezca en los reportes?</div>
+        <form hx-post="{% url 'activate_session_day' %}" hx-target="#daily-attendance-fragment" hx-swap="outerHTML" method="POST" class="mb-0" onsubmit="(function(btn){btn.disabled=true; btn.innerText='Activando...';})(this.querySelector('button[type=submit]'))" hx-on='htmx:afterRequest: (event)=>{ if(event.detail && event.detail.xhr && event.detail.xhr.status >= 400){ let b=this.querySelector("button[type=submit]"); if(b){ b.disabled=false; b.innerText="Activar sesión"; } } }'>
+            {% csrf_token %}
+            <input type="hidden" name="grupo" value="{{ grupo }}">
+            <input type="hidden" name="fecha" value="{{ fecha|date:'Y-m-d' }}">
+            <button type="submit" class="btn btn-primary btn-sm">Activar sesión</button>
+        </form>
+    </div>
+    {% endif %}
+
+    {% regroup estudiantes by grupo as grouped_students %}
+    {% for group in grouped_students %}
+        <h2>Grupo: {{ group.grouper }} <small class="text-muted"> - Asistentes: <span id="attendance-count-{{ forloop.counter }}">0</span></small></h2>
+        <table class="table table-striped table-bordered mb-4" data-group-index="{{ forloop.counter }}">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Asistencia</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+                        <tbody>
+                                {% for student in group.list %}
+                                        {% include 'asistencias/_student_row.html' with student=student %}
+                                {% endfor %}
+                        </tbody>
+        </table>
+    {% endfor %}
+    </div>
+
+{# Client-side filtering + counters: filters table rows by student name (case-insensitive). Debounced. #}
+<script>
+;(function(){
+    var fragment = document.getElementById('daily-attendance-fragment');
+    if(!fragment) return;
+
+    function normalize(s){ return (s||'').toLowerCase().trim(); }
+
+    function updateAttendanceCounts(){
+        // for each table in the fragment, count present badges in visible rows
+        var tables = fragment.querySelectorAll('table[data-group-index]');
+        tables.forEach(function(tbl){
+            var idx = tbl.getAttribute('data-group-index');
+            var presentCount = 0;
+            // only count visible rows
+            tbl.querySelectorAll('tbody tr').forEach(function(r){
+                if(r.style.display === 'none') return;
+                // look for badge with bg-success or text 'Presente'
+                var badge = r.querySelector('.badge.bg-success');
+                if(badge || (r.querySelectorAll('td')[1] && normalize(r.querySelectorAll('td')[1].textContent).indexOf('presente') !== -1)){
+                    presentCount += 1;
+                }
+            });
+            var span = document.getElementById('attendance-count-' + idx);
+            if(span) span.textContent = String(presentCount);
+        });
+    }
+
+    // filtering logic
+    var input = document.getElementById('attendance-search');
+    var timeout = null;
+    function filter(){
+        var q = normalize(input.value);
+        var rows = fragment.querySelectorAll('tr[id^="student-row-"]');
+        rows.forEach(function(r){
+            var name = r.dataset.name;
+            if(!name){
+                var cell = r.querySelector('td');
+                name = cell ? cell.textContent : '';
+                r.dataset.name = name;
+            }
+            var ok = !q || normalize(name).indexOf(q) !== -1;
+            r.style.display = ok ? '' : 'none';
+        });
+        updateAttendanceCounts();
+    }
+
+    if(input){
+        input.addEventListener('input', function(){
+            clearTimeout(timeout);
+            timeout = setTimeout(filter, 150);
+        });
+    }
+
+    // Recompute counters on HTMX swaps/updates (when rows or fragment change)
+    document.body.addEventListener('htmx:afterSwap', function(e){
+        // only update if the swap affected our fragment
+        if(e.detail && e.detail.target && fragment.contains(e.detail.target)){
+            updateAttendanceCounts();
+        }
+    });
+    document.body.addEventListener('htmx:afterOnLoad', function(e){ updateAttendanceCounts(); });
+
+    // initial compute
+    updateAttendanceCounts();
+})();
+</script>
+</div>

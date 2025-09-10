@@ -1,0 +1,28 @@
+{% extends '_base_layout.html' %}
+{% load bootstrap5 %}
+{% block content %}
+<div class="container mt-6">
+    <div class="row justify-content-center">
+        <div class="col-md-6 mx-auto">
+            <h1 class="mb-3 text-center">Registrar Pago</h1>
+            <form method="POST" action="{% url 'registrar_pago' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary w-100">Registrar Pago</button>
+            </form>
+
+            {% if mensaje %}
+                <div class="alert alert-success mt-3">
+                    {{ mensaje }}
+                </div>
+            {% endif %}
+
+            {% if error %}
+                <div class="alert alert-danger mt-3">
+                    {{ error }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

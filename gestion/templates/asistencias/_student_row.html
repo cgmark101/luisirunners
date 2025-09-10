@@ -1,0 +1,44 @@
+<tr id="student-row-{{ student.pk }}">
+    <td>{{ student.first_name }} {{ student.last_name }}</td>
+    <td>
+        {% if student.asistencia and student.asistencia.presente %}
+            <span class="badge bg-success">Presente</span>
+        {% else %}
+            <span class="badge bg-danger">Ausente</span>
+        {% endif %}
+    </td>
+    <td>
+        {% if student.asistencia %}
+            {% if session_active %}
+                <form hx-post="{% url 'htmx_update_asistencia' pk=student.asistencia.pk %}" method="POST" hx-target="#student-row-{{ student.pk }}" hx-swap="outerHTML"
+                      onsubmit="var b=this.querySelector('button[type=submit]'); if(b){ b.dataset.orig=b.innerHTML; b.disabled=true; b.innerHTML='<span class=\'spinner-border spinner-border-sm\' role=\'status\' aria-hidden=\'true\'></span> Guardando...'; }"
+                      hx-on="htmx:responseError: (function(e){ var b=this.querySelector('button[type=submit]'); if(b){ b.disabled=false; b.innerHTML=b.dataset.orig || (b.classList.contains('btn-danger') ? 'Marcar Ausente' : 'Marcar Presente'); } })">
+                    {% csrf_token %}
+                    {% if student.asistencia.presente %}
+                        <button type="submit" class="btn btn-danger">Marcar Ausente</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-success">Marcar Presente</button>
+                    {% endif %}
+                </form>
+            {% else %}
+                {% if student.asistencia.presente %}
+                    <button class="btn btn-danger" disabled title="La sesión no está activa">Marcar Ausente</button>
+                {% else %}
+                    <button class="btn btn-success" disabled title="La sesión no está activa">Marcar Presente</button>
+                {% endif %}
+            {% endif %}
+        {% else %}
+                        {% if session_active %}
+                                <form hx-post="{% url 'htmx_create_asistencia' pk=student.pk %}" method="POST" hx-target="#student-row-{{ student.pk }}" hx-swap="outerHTML"
+                                            onsubmit="var b=this.querySelector('button[type=submit]'); if(b){ b.dataset.orig=b.innerHTML; b.disabled=true; b.innerHTML='<span class=\'spinner-border spinner-border-sm\' role=\'status\' aria-hidden=\'true\'></span> Guardando...'; }"
+                                            hx-on="htmx:responseError: (function(e){ var b=this.querySelector('button[type=submit]'); if(b){ b.disabled=false; b.innerHTML=b.dataset.orig || 'Marcar Presente'; } })">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="fecha" value="{{ fecha|date:'Y-m-d' }}">
+                                        <button type="submit" class="btn btn-success">Marcar Presente</button>
+                                </form>
+            {% else %}
+                <button class="btn btn-success" disabled title="La sesión no está activa">Marcar Presente</button>
+            {% endif %}
+        {% endif %}
+    </td>
+</tr>

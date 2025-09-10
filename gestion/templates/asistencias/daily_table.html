@@ -1,0 +1,9 @@
+{% extends '_base_layout.html' %}
+{% load bootstrap5 %}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-3">Asistencia del Día {% if fecha %} - {{ fecha }}{% endif %}</h1>
+    {# Incluir fragmento que será reemplazado por HTMX al activar la sesión #}
+    {% include 'asistencias/_daily_table_fragment.html' %}
+</div>
+{% endblock %}

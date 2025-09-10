@@ -1,0 +1,24 @@
+{% extends '_base_layout.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-3">Semanas del año</h1>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Semana</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for week in weeks %}
+            <tr>
+                <td>{{ week.start_date }} - {{ week.end_date }}</td>
+                <td>{{ week.week }}</td>
+                <td><a href="{{ week.url }}" class="btn btn-primary btn-sm">Ver Detalles</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
