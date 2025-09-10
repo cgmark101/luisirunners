@@ -19,8 +19,9 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-        <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <!-- Sidebar -->
+    {% block sidebar %}
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
@@ -54,8 +55,9 @@
 
             <hr class="sidebar-divider d-none d-md-block">
 
-        </ul>
-        <!-- End of Sidebar -->
+    </ul>
+    <!-- End of Sidebar -->
+    {% endblock sidebar %}
 
 
         <!-- Content Wrapper -->
