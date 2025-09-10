@@ -514,7 +514,7 @@ def download_daily_attendance_summary(request, grupo, fecha):
         wb = Workbook()
         ws = cast(Worksheet, wb.active)
 
-        header = ["Nombres", "Fecha", "presente"]
+        header = ["Nombres", "Fecha", "Asistencias"]
 
         # Construir filas en memoria
         rows_data = []
@@ -529,8 +529,8 @@ def download_daily_attendance_summary(request, grupo, fecha):
 
         # Escribir encabezado y filas (solo una vez)
         ws.append(header)
-        for r in rows_data:
-            ws.append(r)
+        for row_item in rows_data:
+            ws.append(row_item)
 
         # Ajustar ancho de columnas según el contenido
         nrows = len(rows_data) + 1
@@ -538,9 +538,9 @@ def download_daily_attendance_summary(request, grupo, fecha):
         for col_idx in range(1, ncols + 1):
             header_len = len(str(header[col_idx - 1]))
             max_row_len = 0
-            for r in rows_data:
+            for row_item in rows_data:
                 try:
-                    val = r[col_idx - 1]
+                    val = row_item[col_idx - 1]
                 except Exception:
                     val = ""
                 l = len(str(val))
@@ -552,8 +552,8 @@ def download_daily_attendance_summary(request, grupo, fecha):
 
         # Resaltar celdas con 'Ausente' en rojo
         red_fill = PatternFill(start_color="FFFFCCCC", end_color="FFFFCCCC", fill_type="solid")
-        for row in ws.iter_rows(min_row=2, max_row=nrows, min_col=2, max_col=1 + ncols):
-            for cell in row:
+        for row_cells in ws.iter_rows(min_row=2, max_row=nrows, min_col=2, max_col=1 + ncols):
+            for cell in row_cells:
                 try:
                     if str(cell.value).strip().lower() == "ausente":
                         cell.fill = red_fill
@@ -597,7 +597,7 @@ def download_daily_attendance_summary(request, grupo, fecha):
         filename = f"asistencias_grupo_{grupo}_{fecha}.csv"
         response["Content-Disposition"] = f'attachment; filename="{filename}"'
         writer = csv.writer(response)
-        writer.writerow(["Nombres", "Fecha", "presente"])
+        writer.writerow(["Nombres", "Fecha", "Asistencias"])
         for r in rows:
             presente_str = "Presente" if r["presente"] else "Ausente"
             fecha_str = (
