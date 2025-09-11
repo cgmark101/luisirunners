@@ -76,7 +76,7 @@ def daily_attendance(request, grupo, fecha=None):
     else:
         fecha = datetime.strptime(fecha, "%Y-%m-%d").date()
 
-    estudiantes = Usuario.objects.filter(rol="ALUMNO", grupo=grupo).order_by("last_name")
+    estudiantes = Usuario.objects.filter(rol="ALUMNO", grupo=grupo).order_by("first_name", "last_name")
     asistencia = Asistencia.objects.filter(fecha=fecha)
 
     estudiantes_filtered = []
@@ -180,7 +180,7 @@ def activate_session_day(request):
     session.save()
     # Render and return the updated fragment so HTMX can swap it in-place
     # Rebuild the estudiantes/context for the fragment
-    estudiantes = Usuario.objects.filter(rol="ALUMNO", grupo=grupo).order_by("last_name")
+    estudiantes = Usuario.objects.filter(rol="ALUMNO", grupo=grupo).order_by("first_name", "last_name")
     asistencia_qs = Asistencia.objects.filter(fecha=fecha_obj)
     estudiantes_filtered = []
     for estudiante in estudiantes:
@@ -235,7 +235,7 @@ def deactivate_session_day(request):
         pass
 
     # Rebuild context and return fragment
-    estudiantes = Usuario.objects.filter(rol="ALUMNO", grupo=grupo).order_by("last_name")
+    estudiantes = Usuario.objects.filter(rol="ALUMNO", grupo=grupo).order_by("first_name", "last_name")
     asistencia_qs = Asistencia.objects.filter(fecha=fecha_obj)
     estudiantes_filtered = []
     for estudiante in estudiantes:
@@ -279,7 +279,7 @@ def download_attendance_summary(request, grupo):
     Columnas: nombre, fecha_primera, fecha_ultima, total_sesiones, asistencias
     """
     # Obtener estudiantes del grupo
-    estudiantes = Usuario.objects.filter(rol="ALUMNO", grupo=grupo).order_by("last_name")
+    estudiantes = Usuario.objects.filter(rol="ALUMNO", grupo=grupo).order_by("first_name", "last_name")
 
     # Construir datos de resumen
     rows = []
@@ -348,7 +348,7 @@ def download_weekly_attendance_summary(request, grupo, semana):
     # Si no hay días activos en la semana, devolver un CSV/XLSX vacío con solo encabezado
     days = active_days
 
-    estudiantes = Usuario.objects.filter(rol="ALUMNO", grupo=grupo).order_by("last_name")
+    estudiantes = Usuario.objects.filter(rol="ALUMNO", grupo=grupo).order_by("first_name", "last_name")
 
     # Prefetch asistencias para la semana en un solo query y construir un mapa (alumno, fecha) -> presente
     asistencias_qs = Asistencia.objects.filter(alumno__in=estudiantes, fecha__gte=start_date, fecha__lte=end_date)
@@ -488,7 +488,7 @@ def download_daily_attendance_summary(request, grupo, fecha):
             status=404,
         )
 
-    estudiantes = Usuario.objects.filter(rol="ALUMNO", grupo=grupo).order_by("last_name")
+    estudiantes = Usuario.objects.filter(rol="ALUMNO", grupo=grupo).order_by("first_name", "last_name")
     rows = []
     for estudiante in estudiantes:
         try:
