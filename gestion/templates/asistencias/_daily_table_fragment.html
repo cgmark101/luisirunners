@@ -45,6 +45,8 @@
                 <span class="d-block">Inasistentes: <strong id="absent-count-{{ forloop.counter }}">0</strong></span>
             </small>
         </h2>
+
+        <div class="table-responsive">
         <table class="table table-striped table-bordered mb-4" data-group-index="{{ forloop.counter }}">
             <thead>
                 <tr>
@@ -58,7 +60,8 @@
                                         {% include 'asistencias/_student_row.html' with student=student %}
                                 {% endfor %}
                         </tbody>
-        </table>
+    </table>
+    </div>
     {% endfor %}
     </div>
 

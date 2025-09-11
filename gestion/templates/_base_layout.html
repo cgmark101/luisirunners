@@ -21,6 +21,20 @@
         table .text-muted, table small {
             color: #6b6b6b !important;
         }
+        /* Defensive styles: prevent content from collapsing to blank when sidebar is toggled on small screens */
+        body.sidebar-toggled #wrapper,
+        body.sidebar-toggled #content-wrapper,
+        .sidebar.toggled ~ #content-wrapper,
+        #wrapper #content-wrapper {
+            display: flex !important; /* keep flex layout */
+            width: 100% !important; /* ensure content fills available area */
+            overflow: visible !important; /* avoid hidden overflow causing white screen */
+        }
+        /* Ensure content area remains scrollable on small screens */
+        #content {
+            flex: 1 0 auto !important;
+            min-width: 0; /* avoid overflow due to long content */
+        }
     </style>
     {% endblock %}
     {% htmx_script %}
@@ -151,6 +165,58 @@
     {% endblock %}
 
     {% htmx_script %}
+    <!-- Persist sidebar state between pages using localStorage -->
+    <script>
+    (function(){
+
+        var STORAGE_KEY = 'lr_sidebar_toggled';
+
+        function applyState(toggled){
+            if(toggled){
+                document.body.classList.add('sidebar-toggled');
+                var sb = document.querySelector('.sidebar'); if(sb) sb.classList.add('toggled');
+            } else {
+                document.body.classList.remove('sidebar-toggled');
+                var sb = document.querySelector('.sidebar'); if(sb) sb.classList.remove('toggled');
+            }
+        }
+
+        // read saved state and apply early
+        try{
+            var saved = localStorage.getItem(STORAGE_KEY);
+            if(saved !== null){
+                applyState(saved === '1');
+            }
+        }catch(e){ /* ignore localStorage errors */ }
+
+        // attach handlers to toggles (both desktop and topbar toggles)
+        function toggleHandler(e){
+            // let SB Admin 2 toggle first (it may have handlers attached). Use a small timeout.
+            setTimeout(function(){
+                var sb = document.querySelector('.sidebar');
+                var toggled = !!(sb && sb.classList.contains('toggled')) || document.body.classList.contains('sidebar-toggled');
+                try{ localStorage.setItem(STORAGE_KEY, toggled ? '1' : '0'); }catch(err){}
+            }, 10);
+        }
+
+        document.addEventListener('DOMContentLoaded', function(){
+            var t = document.getElementById('sidebarToggle');
+            var t2 = document.getElementById('sidebarToggleTop');
+            if(t) t.addEventListener('click', toggleHandler);
+            if(t2) t2.addEventListener('click', toggleHandler);
+            // also update storage on window.resize when SB Admin 2 auto-collapses at very small widths
+            window.addEventListener('resize', function(){
+                // when SB Admin 2 forces collapse under 480px it adds classes; reflect that
+                setTimeout(function(){
+                    var sb = document.querySelector('.sidebar');
+                    var toggled = !!(sb && sb.classList.contains('toggled')) || document.body.classList.contains('sidebar-toggled');
+                    try{ localStorage.setItem(STORAGE_KEY, toggled ? '1' : '0'); }catch(err){}
+                }, 50);
+            });
+        });
+    })();
+    </script>
+*** End Patch
 
 </body>
 
