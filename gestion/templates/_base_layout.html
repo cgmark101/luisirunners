@@ -133,8 +133,8 @@
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>© {{ now|date:"Y" }} LuisiRunners</span>
+                    <div class="d-flex justify-content-between align-items-center my-auto">
+                        <div class="text-muted small">© {% now "Y" %} <span class="fw-bold">LuisiRunners</span></div>
                     </div>
                 </div>
             </footer>
@@ -216,7 +216,6 @@
         });
     })();
     </script>
-*** End Patch
 
 </body>
 
