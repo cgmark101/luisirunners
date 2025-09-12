@@ -362,6 +362,24 @@ def registrar_pago(request):
 
 
 @login_required
+def atletas(request):
+    """List all athletes (Usuarios with rol='ALUMNO')."""
+    from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+    alumnos_qs = Usuario.objects.filter(rol="ALUMNO").order_by("first_name", "last_name")
+    page = request.GET.get('page', 1)
+    paginator = Paginator(alumnos_qs, 25)
+    try:
+        alumnos = paginator.page(page)
+    except PageNotAnInteger:
+        alumnos = paginator.page(1)
+    except EmptyPage:
+        alumnos = paginator.page(paginator.num_pages)
+
+    return render(request, "atletas.html", {"alumnos": alumnos, "paginator": paginator})
+
+
+@login_required
 def download_attendance_summary(request, grupo):
     """
     Genera y devuelve un CSV resumido de asistencias para todos los alumnos de un grupo.

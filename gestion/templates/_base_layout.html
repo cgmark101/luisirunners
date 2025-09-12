@@ -72,24 +72,29 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Items -->
+            {% if user.is_authenticated %}
             <li class="nav-item {% if request.resolver_match.url_name == 'portal_index' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'portal_index' %}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Panel</span></a>
             </li>
-
+            <li class="nav-item {% if request.resolver_match.url_name == 'atletas_list' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'atletas_list' %}">
+                    <i class="fas fa-fw fa-running"></i>
+                    <span>Atletas</span></a>
+            </li>
             <li class="nav-item {% if request.resolver_match.url_name == 'ver_grupos' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'ver_grupos' %}">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Asistencias</span></a>
             </li>
-
             {% if user.is_staff %}
             <li class="nav-item {% if request.resolver_match.url_name == 'registrar_pago' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'registrar_pago' %}">
                     <i class="fas fa-fw fa-credit-card"></i>
                     <span>Pagos</span></a>
             </li>
+            {% endif %}
             {% endif %}
 
             <hr class="sidebar-divider d-none d-md-block">
