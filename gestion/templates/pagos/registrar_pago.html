@@ -161,7 +161,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
     function updateBancoVisibility(){
         var v = tipo.value;
-        if(v === 'PAGO_MOVIL'){
+        var showFor = ['PAGO_MOVIL', 'TRANSFERENCIA', 'DEPOSITO'];
+        if(showFor.indexOf(v) !== -1){
             bancoContainer.style.display = '';
         } else {
             bancoContainer.style.display = 'none';

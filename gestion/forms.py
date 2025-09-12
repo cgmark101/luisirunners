@@ -42,7 +42,8 @@ class PagoForm(ModelForm):
         cleaned = super().clean()
         tipo = cleaned.get('tipo_transaccion')
         banco = cleaned.get('banco_emisor')
-        if tipo == 'PAGO_MOVIL':
+        required_for = ('PAGO_MOVIL', 'TRANSFERENCIA', 'DEPOSITO')
+        if tipo in required_for:
             if not banco:
-                self.add_error('banco_emisor', 'El banco emisor es obligatorio para Pago Móvil.')
+                self.add_error('banco_emisor', 'El banco emisor es obligatorio para el tipo de transacción seleccionado.')
         return cleaned
