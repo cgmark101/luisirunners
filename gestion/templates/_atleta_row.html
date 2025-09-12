@@ -2,7 +2,6 @@
   <td>{{ index|default:1 }}</td>
   <td>{{ a.first_name }} {{ a.last_name }}</td>
   <td>{% if a.grupo %}{{ a.grupo.nombre }}{% else %}&mdash;{% endif %}</td>
-  <td>{% if a.exento_pago %}Sí{% else %}No{% endif %}</td>
   <td>{% if a.is_active %}Sí{% else %}No{% endif %}</td>
   <td>
     {% if request.user.is_staff %}

@@ -48,7 +48,6 @@
           <th>#</th>
           <th>Nombre</th>
           <th>Grupo</th>
-          <th>Exento de pago</th>
           <th>Activo</th>
           <th>Acciones</th>
         </tr>
@@ -57,7 +56,7 @@
         {% for a in alumnos %}
           {% include '_atleta_row.html' with a=a index=forloop.counter0|add:alumnos.start_index %}
         {% empty %}
-          <tr><td colspan="6">No hay atletas registrados.</td></tr>
+          <tr><td colspan="5">No hay atletas registrados.</td></tr>
         {% endfor %}
       </tbody>
     </table>
