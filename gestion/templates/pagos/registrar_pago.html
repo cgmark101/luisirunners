@@ -8,6 +8,14 @@
             <form method="POST" action="{% url 'registrar_pago' %}">
                 {% csrf_token %}
 
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for e in form.non_field_errors %}
+                            <div>{{ e }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
                 {# Alumno: provide a client-side searchable input and keep the select hidden for form submission #}
                 <div class="mb-3">
                     <label for="alumno_search" class="form-label">Buscar Alumno</label>
@@ -23,18 +31,30 @@
                 <div class="mb-3">
                     {{ form.fecha_pago.label_tag }}
                     {{ form.fecha_pago }}
+                    {% if form.fecha_pago.errors %}
+                        <div class="text-danger small mt-1">{{ form.fecha_pago.errors|join:", " }}</div>
+                    {% endif %}
                 </div>
                 <div class="mb-3">
                     {{ form.numero_referencia.label_tag }}
                     {{ form.numero_referencia }}
+                    {% if form.numero_referencia.errors %}
+                        <div class="text-danger small mt-1">{{ form.numero_referencia.errors|join:", " }}</div>
+                    {% endif %}
                 </div>
                 <div class="mb-3">
                     {{ form.tipo_transaccion.label_tag }}
                     {{ form.tipo_transaccion }}
+                    {% if form.tipo_transaccion.errors %}
+                        <div class="text-danger small mt-1">{{ form.tipo_transaccion.errors|join:", " }}</div>
+                    {% endif %}
                 </div>
                 <div id="banco_emisor_container" class="mb-3">
                     {{ form.banco_emisor.label_tag }}
                     {{ form.banco_emisor }}
+                    {% if form.banco_emisor.errors %}
+                        <div class="text-danger small mt-1">{{ form.banco_emisor.errors|join:", " }}</div>
+                    {% endif %}
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100">Registrar Pago</button>

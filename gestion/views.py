@@ -347,8 +347,15 @@ def registrar_pago(request):
     if request.method == "POST":
         form = PagoForm(request.POST)
         if form.is_valid():
-            form.save()
-            return render(request, "pagos/registro_exitoso.html")
+            try:
+                form.save()
+                return render(request, "pagos/registro_exitoso.html")
+            except Exception as e:
+                # Log the exception and add a non-field error so the template shows it
+                import logging
+
+                logging.exception("Error saving Pago")
+                form.add_error(None, f"Error guardando el pago: {e}")
     else:
         form = PagoForm()
     return render(request, "pagos/registrar_pago.html", {"form": form})

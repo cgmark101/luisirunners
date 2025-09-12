@@ -181,7 +181,7 @@ class Pago(models.Model):
         help_text="Identificador único de la transacción",
     )
     banco_emisor = models.CharField(
-        "Banco emisor", max_length=4, choices=BANCOS_CHOICES
+        "Banco emisor", max_length=4, choices=BANCOS_CHOICES, blank=True, null=True
     )
     tipo_transaccion = models.CharField(
         "Tipo de transacción",
