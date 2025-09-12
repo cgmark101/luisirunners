@@ -32,7 +32,7 @@
                     {{ form.tipo_transaccion.label_tag }}
                     {{ form.tipo_transaccion }}
                 </div>
-                <div class="mb-3">
+                <div id="banco_emisor_container" class="mb-3">
                     {{ form.banco_emisor.label_tag }}
                     {{ form.banco_emisor }}
                 </div>
@@ -131,6 +131,26 @@ document.addEventListener('DOMContentLoaded', function(){
             locale: 'es'
         });
     }
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    var tipo = document.querySelector('select[name="tipo_transaccion"]');
+    var bancoContainer = document.getElementById('banco_emisor_container');
+    if(!tipo || !bancoContainer) return;
+
+    function updateBancoVisibility(){
+        var v = tipo.value;
+        if(v === 'PAGO_MOVIL'){
+            bancoContainer.style.display = '';
+        } else {
+            bancoContainer.style.display = 'none';
+        }
+    }
+
+    // initial
+    updateBancoVisibility();
+    tipo.addEventListener('change', updateBancoVisibility);
 });
 </script>
 {% endblock %}
