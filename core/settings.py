@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-8ouq#fmvhip+beuhidnz8sn=ess&r$2^=vlcz9h1f_l84b3l_o"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["luisi.run", "localhost", "127.0.0.1", ".vercel.app"]
 CSRF_TRUSTED_ORIGINS = ["https://luisi.run"]

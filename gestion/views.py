@@ -386,6 +386,23 @@ def atletas_edit(request, pk):
 
 
 @login_required
+def atletas_delete(request, pk):
+    # Only superusers allowed to delete
+    if not (request.user.is_active and request.user.is_superuser):
+        return HttpResponse("Forbidden", status=403)
+    try:
+        a = Usuario.objects.get(pk=pk, rol="ALUMNO")
+    except Usuario.DoesNotExist:
+        return HttpResponse("Not found", status=404)
+    if request.method == "POST":
+        a.delete()
+        # Return 204 No Content so HTMX can remove the row client-side
+        return HttpResponse(status=204)
+    # If GET, return a small confirmation fragment
+    return render(request, "_atleta_delete_confirm.html", {"a": a})
+
+
+@login_required
 @user_passes_test(_user_is_staff)
 def registrar_pago(request):
     if request.method == "POST":

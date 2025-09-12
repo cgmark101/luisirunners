@@ -55,26 +55,9 @@
       </thead>
       <tbody>
         {% for a in alumnos %}
-        <tr>
-          <td>{{ forloop.counter0|add:alumnos.start_index }}</td>
-          <td>{{ a.first_name }} {{ a.last_name }}</td>
-          <td>
-            {% if a.grupo %}
-              {{ a.grupo.nombre }}
-            {% else %}
-              &mdash;
-            {% endif %}
-          </td>
-          <td>{% if a.exento_pago %}Sí{% else %}No{% endif %}</td>
-          <td>{% if a.is_active %}Sí{% else %}No{% endif %}</td>
-          <td>
-            {% if request.user.is_staff %}
-              <a href="{% url 'admin:gestion_usuario_change' a.id %}">Editar</a>
-            {% endif %}
-          </td>
-        </tr>
+          {% include '_atleta_row.html' with a=a index=forloop.counter0|add:alumnos.start_index %}
         {% empty %}
-        <tr><td colspan="7">No hay atletas registrados.</td></tr>
+          <tr><td colspan="6">No hay atletas registrados.</td></tr>
         {% endfor %}
       </tbody>
     </table>

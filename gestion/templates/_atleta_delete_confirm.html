@@ -1,0 +1,7 @@
+<div class="p-2">
+  <p>¿Eliminar atleta <strong>{{ a.first_name }} {{ a.last_name }}</strong>? Esta acción no se puede deshacer.</p>
+  <div class="d-flex gap-2">
+    <button class="btn btn-sm btn-danger" type="button" hx-post="{% url 'atletas_delete' a.id %}" hx-target="#atleta-row-{{ a.id }}" hx-swap="outerHTML">Confirmar</button>
+    <button class="btn btn-sm btn-secondary" type="button" hx-get="{% url 'atletas_row' a.id %}" hx-target="#atleta-row-{{ a.id }}" hx-swap="outerHTML">Cancelar</button>
+  </div>
+</div>

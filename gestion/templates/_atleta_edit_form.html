@@ -1,0 +1,26 @@
+<tr id="atleta-row-{{ a.id }}" data-debug="atletas-edit-row">
+  <td>
+    {# put CSRF token as hidden input so hx-include can include it in the POST #}
+    {% csrf_token %}
+  </td>
+  <td><input name="first_name" class="form-control" value="{{ a.first_name }}" required/></td>
+  <td><input name="last_name" class="form-control" value="{{ a.last_name }}" required/></td>
+  <td>
+    <select name="grupo" class="form-control custom-select">
+      <option value="">-</option>
+      {% for g in grupos %}
+        <option value="{{ g.id }}" {% if a.grupo and a.grupo.id == g.id %}selected{% endif %}>{{ g.nombre }}</option>
+      {% endfor %}
+    </select>
+  </td>
+  <td><input type="checkbox" name="exento_pago" value="1" {% if a.exento_pago %}checked{% endif %}></td>
+  <td><input type="checkbox" name="is_active" value="1" {% if a.is_active %}checked{% endif %}></td>
+  <td>
+    <button class="btn btn-sm btn-primary" type="button"
+      hx-post="{% url 'atletas_edit' a.id %}"
+      hx-include="#atleta-row-{{ a.id }} input, #atleta-row-{{ a.id }} select"
+      hx-target="#atleta-row-{{ a.id }}"
+      hx-swap="outerHTML">Guardar</button>
+    <button class="btn btn-sm btn-secondary" type="button" hx-get="{% url 'atletas_row' a.id %}" hx-target="#atleta-row-{{ a.id }}" hx-swap="outerHTML">Cancelar</button>
+  </td>
+</tr>

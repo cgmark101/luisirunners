@@ -19,4 +19,5 @@ urlpatterns = [
     path("pagos/atletas/", views.atletas, name="atletas_list"),
     path("pagos/atletas/edit/<int:pk>/", views.atletas_edit, name="atletas_edit"),
     path("pagos/atletas/row/<int:pk>/", views.atletas_row, name="atletas_row"),
+    path("pagos/atletas/delete/<int:pk>/", views.atletas_delete, name="atletas_delete"),
 ]
