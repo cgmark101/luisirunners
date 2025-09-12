@@ -17,4 +17,6 @@ urlpatterns = [
     path("asistencia/htmx/deactivate_session_day/", views.deactivate_session_day, name="deactivate_session_day"),
     path("pagos/", views.registrar_pago, name="registrar_pago"),
     path("pagos/atletas/", views.atletas, name="atletas_list"),
+    path("pagos/atletas/edit/<int:pk>/", views.atletas_edit, name="atletas_edit"),
+    path("pagos/atletas/row/<int:pk>/", views.atletas_row, name="atletas_row"),
 ]

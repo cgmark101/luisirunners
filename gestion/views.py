@@ -7,6 +7,9 @@ from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.http import require_POST
+from django.contrib import messages
+import random
+import string
 import csv
 from django.utils.encoding import smart_str
 from io import BytesIO
@@ -343,6 +346,47 @@ def _user_is_staff(user):
 
 @login_required
 @user_passes_test(_user_is_staff)
+def atletas_row(request, pk):
+    """Return a single atleta table row fragment (used to refresh after edits)."""
+    try:
+        a = Usuario.objects.get(pk=pk, rol="ALUMNO")
+    except Usuario.DoesNotExist:
+        return HttpResponse("Not found", status=404)
+    return render(request, "_atleta_row.html", {"a": a, "request": request})
+
+
+@login_required
+@user_passes_test(_user_is_staff)
+def atletas_edit(request, pk):
+    """Return an edit form fragment for an atleta (GET) and handle POST to save minimal fields."""
+    try:
+        a = Usuario.objects.get(pk=pk, rol="ALUMNO")
+    except Usuario.DoesNotExist:
+        return HttpResponse("Not found", status=404)
+
+    if request.method == "POST":
+        # Only allow updating these fields: first_name, last_name, grupo, exento_pago, is_active
+        a.first_name = request.POST.get("first_name", a.first_name)
+        a.last_name = request.POST.get("last_name", a.last_name)
+        grupo_id = request.POST.get("grupo")
+        try:
+            if grupo_id:
+                a.grupo = Grupo.objects.get(pk=grupo_id)
+        except Grupo.DoesNotExist:
+            pass
+        a.exento_pago = bool(request.POST.get("exento_pago"))
+        a.is_active = bool(request.POST.get("is_active"))
+        a.save()
+        # Return the updated row fragment so HTMX can swap it
+        return render(request, "_atleta_row.html", {"a": a, "request": request})
+
+    # GET: render the edit form fragment
+    grupos = Grupo.objects.all()
+    return render(request, "_atleta_edit_form.html", {"a": a, "grupos": grupos})
+
+
+@login_required
+@user_passes_test(_user_is_staff)
 def registrar_pago(request):
     if request.method == "POST":
         form = PagoForm(request.POST)
@@ -365,6 +409,53 @@ def registrar_pago(request):
 def atletas(request):
     """List all athletes (Usuarios with rol='ALUMNO')."""
     from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+    # Handle creation of a new athlete via POST (staff only)
+    if request.method == "POST":
+        if not (request.user.is_staff and request.user.is_active):
+            return HttpResponse("Forbidden", status=403)
+        first_name = request.POST.get("first_name", "").strip()
+        last_name = request.POST.get("last_name", "").strip()
+        grupo_id = request.POST.get("grupo")
+        if not first_name or not last_name or not grupo_id:
+            messages.error(request, "Debe completar nombre, apellido y grupo.")
+            return redirect("atletas_list")
+        try:
+            grupo = Grupo.objects.get(pk=grupo_id)
+        except Grupo.DoesNotExist:
+            messages.error(request, "Grupo no encontrado.")
+            return redirect("atletas_list")
+
+        # Generate a random username and password
+        def _random_string(n=8):
+            chars = string.ascii_lowercase + string.digits
+            return ''.join(random.choice(chars) for _ in range(n))
+
+        # Ensure username uniqueness
+        username_base = (first_name[0] + last_name).lower()
+        username_base = re.sub(r"[^a-z0-9]", "", username_base)
+        username = username_base or _random_string(6)
+        attempt = 0
+        while Usuario.objects.filter(username=username).exists() and attempt < 10:
+            username = f"{username_base}{_random_string(3)}"
+            attempt += 1
+        if Usuario.objects.filter(username=username).exists():
+            username = f"{username_base}{_random_string(6)}"
+
+        password = _random_string(10)
+
+        # Create the user (inactive=False by default) and set role ALUMNO
+        try:
+            usuario = Usuario.objects.create_user(username=username, password=password,
+                                                  first_name=first_name, last_name=last_name,
+                                                  rol="ALUMNO", grupo=grupo)
+            # Optionally set is_active=True if you want them to be able to login
+            usuario.is_active = True
+            usuario.save()
+            messages.success(request, f"Atleta creado. Usuario: {username} — Clave: {password}")
+        except Exception as e:
+            messages.error(request, f"Error creando atleta: {e}")
+            messages.error(request, "Ocurrió un error al crear el atleta.")
+        return redirect("atletas_list")
 
     alumnos_qs = Usuario.objects.filter(rol="ALUMNO").order_by("first_name", "last_name")
     page = request.GET.get('page', 1)
@@ -376,7 +467,10 @@ def atletas(request):
     except EmptyPage:
         alumnos = paginator.page(paginator.num_pages)
 
-    return render(request, "atletas.html", {"alumnos": alumnos, "paginator": paginator})
+    # provide grupos for the add form
+    grupos = Grupo.objects.all()
+
+    return render(request, "atletas.html", {"alumnos": alumnos, "paginator": paginator, "grupos": grupos})
 
 
 @login_required

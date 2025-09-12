@@ -1,0 +1,13 @@
+<tr id="atleta-row-{{ a.id }}">
+  <td>{{ forloop.counter0|default:0 }}</td>
+  <td>{{ a.first_name }} {{ a.last_name }}</td>
+  <td>{{ a.username }}</td>
+  <td>{% if a.grupo %}{{ a.grupo.nombre }}{% else %}&mdash;{% endif %}</td>
+  <td>{% if a.exento_pago %}Sí{% else %}No{% endif %}</td>
+  <td>{% if a.is_active %}Sí{% else %}No{% endif %}</td>
+  <td>
+    {% if request.user.is_staff %}
+      <a hx-get="{% url 'atletas_edit' a.id %}" hx-target="#atleta-row-{{ a.id }}" hx-swap="outerHTML">Editar</a>
+    {% endif %}
+  </td>
+</tr>
