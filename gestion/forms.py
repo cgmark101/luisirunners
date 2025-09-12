@@ -20,7 +20,7 @@ class PagoForm(ModelForm):
         if 'tipo_transaccion' in self.fields:
             tchoices = list(self.fields['tipo_transaccion'].choices)
             if tchoices and tchoices[0][0] != '':
-                tchoices.insert(0, ('', '--- Selecciona tipo de transacción ---'))
+                tchoices.insert(0, ('', '-- Selecciona tipo de transacción --'))
                 self.fields['tipo_transaccion'].choices = tchoices
             # ensure the field starts empty so the user must pick
             self.fields['tipo_transaccion'].initial = ''
