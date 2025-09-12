@@ -1,11 +1,11 @@
 from django.shortcuts import redirect, render
-from .models import Usuario, Asistencia, Grupo
+from .models import Usuario, Asistencia, Grupo, Pago
 from .forms import PagoForm
 from datetime import datetime, date
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse, JsonResponse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.http import require_POST
 import csv
 from django.utils.encoding import smart_str
@@ -63,6 +63,47 @@ def index(request):
         "sessions_labels_json": json.dumps(["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"], ensure_ascii=False),
         "sessions_counts_json": json.dumps(sessions_counts),
     }
+    # Payment metrics: total alumnos and paid vs unpaid for current month
+    try:
+        from django.utils import timezone
+        today = timezone.now().date()
+    except Exception:
+        today = date.today()
+
+    # total alumnos (active/alumno role) excluding those exento de pago
+    total_alumnos = Usuario.objects.filter(rol="ALUMNO", exento_pago=False).count()
+
+    # pagos registrados en el mes actual
+    pagos_mes_qs = Pago.objects.filter(fecha_pago__year=today.year, fecha_pago__month=today.month)
+    # unique alumnos (non-exempt) that have at least one pago this month
+    alumnos_pagaron_ids = pagos_mes_qs.values_list('alumno', flat=True).distinct()
+    alumnos_pagaron_count = Usuario.objects.filter(pk__in=alumnos_pagaron_ids, rol="ALUMNO", exento_pago=False).count()
+    alumnos_no_pagaron_count = max(0, total_alumnos - alumnos_pagaron_count)
+
+    # percentages
+    paid_percent = (alumnos_pagaron_count / total_alumnos * 100) if total_alumnos else 0
+    unpaid_percent = 100 - paid_percent if total_alumnos else 0
+
+    payment_labels = ["Pagaron", "No pagaron"]
+    payment_counts = [alumnos_pagaron_count, alumnos_no_pagaron_count]
+
+    context.update({
+        "total_alumnos": total_alumnos,
+        "payment_labels_json": json.dumps(payment_labels, ensure_ascii=False),
+        "payment_counts_json": json.dumps(payment_counts),
+        "payment_paid_percent": round(paid_percent, 1),
+        "payment_unpaid_percent": round(unpaid_percent, 1),
+    })
+    # month name in Spanish (lowercase)
+    months_es = [
+        "enero", "febrero", "marzo", "abril", "mayo", "junio",
+        "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
+    ]
+    try:
+        current_month_name = months_es[today.month - 1]
+    except Exception:
+        current_month_name = ""
+    context["current_month_name"] = current_month_name
     return render(request, "index.html", context)
 
 
@@ -296,7 +337,12 @@ def deactivate_session_day(request):
     return HttpResponse(html)
 
 
+def _user_is_staff(user):
+    return bool(user and user.is_active and user.is_staff)
+
+
 @login_required
+@user_passes_test(_user_is_staff)
 def registrar_pago(request):
     if request.method == "POST":
         form = PagoForm(request.POST)

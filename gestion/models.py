@@ -60,6 +60,7 @@ class Usuario(AbstractUser):
         default="ALUMNO",
         verbose_name="Rol",
     )
+    exento_pago = models.BooleanField("Exento de pago", default=False)
     inactivo_desde = models.DateField("Inactivo Desde", null=True, blank=True)
 
     def save(self, *args, **kwargs):

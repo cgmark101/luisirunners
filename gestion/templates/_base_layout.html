@@ -84,11 +84,13 @@
                     <span>Asistencias</span></a>
             </li>
 
+            {% if user.is_staff %}
             <li class="nav-item {% if request.resolver_match.url_name == 'registrar_pago' %}active{% endif %}">
                 <a class="nav-link" href="{% url 'registrar_pago' %}">
                     <i class="fas fa-fw fa-credit-card"></i>
                     <span>Pagos</span></a>
             </li>
+            {% endif %}
 
             <hr class="sidebar-divider d-none d-md-block">
 

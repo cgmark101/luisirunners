@@ -3,10 +3,12 @@ from django.contrib.auth.admin import UserAdmin
 from . import models
 
 class CustomUserAdmin(UserAdmin):
-    list_display = ("nombre_completo", "rol", "grupo", "is_active")
+    list_display = ("nombre_completo", "rol", "grupo", "is_active", "exento_pago")
+    list_filter = ("rol", "is_active", "exento_pago")
+    search_fields = ("username", "first_name", "last_name")
     fieldsets = (
         *UserAdmin.fieldsets,
-        ("Información adicional", {"fields": ("rol", "grupo", "inactivo_desde", "uuid",)}),
+        ("Información adicional", {"fields": ("rol", "grupo", "inactivo_desde", "uuid", "exento_pago")} ),
     )
     readonly_fields = getattr(UserAdmin, 'readonly_fields', ()) + ('uuid',)
 
