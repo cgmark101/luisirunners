@@ -1,0 +1,57 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+{% block object-tools %}
+    <div class="object-tools">
+        {{ block.super }}
+    </div>
+
+    <div style="margin-top:8px;">
+        {% now "n" as now_month %}
+        {% now "Y" as now_year %}
+        <form method="get" action="./download_monthly_report/" class="d-flex align-items-center" style="gap:8px;">
+            <label for="month_select">Mes</label>
+            <select id="month_select" name="month" class="form-select">
+                <option value="1" {% if now_month == "1" %}selected{% endif %}>Enero</option>
+                <option value="2" {% if now_month == "2" %}selected{% endif %}>Febrero</option>
+                <option value="3" {% if now_month == "3" %}selected{% endif %}>Marzo</option>
+                <option value="4" {% if now_month == "4" %}selected{% endif %}>Abril</option>
+                <option value="5" {% if now_month == "5" %}selected{% endif %}>Mayo</option>
+                <option value="6" {% if now_month == "6" %}selected{% endif %}>Junio</option>
+                <option value="7" {% if now_month == "7" %}selected{% endif %}>Julio</option>
+                <option value="8" {% if now_month == "8" %}selected{% endif %}>Agosto</option>
+                <option value="9" {% if now_month == "9" %}selected{% endif %}>Septiembre</option>
+                <option value="10" {% if now_month == "10" %}selected{% endif %}>Octubre</option>
+                <option value="11" {% if now_month == "11" %}selected{% endif %}>Noviembre</option>
+                <option value="12" {% if now_month == "12" %}selected{% endif %}>Diciembre</option>
+            </select>
+            <label for="year_input">Año</label>
+            <input id="year_input" name="year" type="number" class="form-control" value="{{ now_year }}" style="width:100px;"/>
+            <button type="submit" class="button default">Descargar reporte mensual</button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <script>
+        // Ensure the admin "Add" button (.addlink) remains at the start of .object-tools
+        document.addEventListener('DOMContentLoaded', function(){
+            try{
+                var objTools = document.querySelector('.object-tools');
+                if(!objTools) return;
+                var addLink = objTools.querySelector('.addlink');
+                if(addLink){
+                    // Move it to be the first child of object-tools
+                    objTools.insertBefore(addLink, objTools.firstChild);
+                } else {
+                    // sometimes add link is placed elsewhere (e.g., in header); try to find globally
+                    var globalAdd = document.querySelector('.addlink');
+                    if(globalAdd) objTools.insertBefore(globalAdd, objTools.firstChild);
+                }
+            }catch(e){
+                // silent
+            }
+        });
+    </script>
+{% endblock %}
