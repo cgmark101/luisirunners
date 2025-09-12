@@ -160,6 +160,11 @@ class Pago(models.Model):
         ("PAGO_MOVIL", "Pago Móvil"),
         ("TRANSFERENCIA", "Transferencia Bancaria"),
         ("DEPOSITO", "Depósito Bancario"),
+        ("EFECTIVO", "Efectivo"),
+        ("ZELLE", "Zelle"),
+        ("BINANCE", "Binance"),
+        ("PAYPAL", "PayPal"),
+        ("OTRO", "Otro"),
     ]
 
     alumno = models.ForeignKey(

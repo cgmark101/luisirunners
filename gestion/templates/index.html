@@ -6,7 +6,7 @@
 <div class="container mt-4">
     <div class="card">
         <div class="card-header">
-            Bienvenido
+            Bienvenido {{ user_display_name }}
         </div>
         <div class="card-body">
             <div class="row">
@@ -27,13 +27,14 @@
     </div>
 </div>
 <script>
-    // Datos hardcodeados para ejemplo
-    // Datos para chart de dona: distribución por tipo de usuario (ejemplo)
+    // Datos reales cargados desde la vista
+    const usersLabels = {{ users_labels_json|safe }};
+    const usersCounts = {{ users_counts_json|safe }};
     const usersData = {
-        labels: ['Atletas', 'Entrenadores', 'Organizadores', 'Invitados'],
+        labels: usersLabels,
         datasets: [{
             label: 'Usuarios por rol',
-            data: [45, 15, 8, 32],
+            data: usersCounts,
             backgroundColor: [
                 'rgba(78,115,223,0.9)',
                 'rgba(28,200,138,0.9)',
@@ -44,11 +45,13 @@
         }]
     };
 
+    const sessionsLabels = {{ sessions_labels_json|safe }};
+    const sessionsCounts = {{ sessions_counts_json|safe }};
     const sessionsData = {
-        labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+        labels: sessionsLabels,
         datasets: [{
-            label: 'Sesiones',
-            data: [3, 2, 4, 5, 6, 2, 1],
+            label: 'Sesiones activas (esta semana)',
+            data: sessionsCounts,
             fill: false,
             borderColor: 'rgba(28,200,138,1)',
             tension: 0.4

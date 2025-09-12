@@ -7,7 +7,36 @@
             <h1 class="mb-3 text-center">Registrar Pago</h1>
             <form method="POST" action="{% url 'registrar_pago' %}">
                 {% csrf_token %}
-                {{ form.as_p }}
+
+                {# Alumno: provide a client-side searchable input and keep the select hidden for form submission #}
+                <div class="mb-3">
+                    <label for="alumno_search" class="form-label">Buscar Alumno</label>
+                    <input id="alumno_search" type="text" class="form-control" placeholder="Escribe nombre o apellido para buscar..." autocomplete="off">
+                    <div id="alumno_suggestions" class="list-group mt-1" style="max-height:200px; overflow:auto; display:none;"></div>
+                    {# Hidden select still rendered so Django form validation/cleaning continues to work #}
+                    <div style="display:none;">
+                        {{ form.alumno }}
+                    </div>
+                </div>
+
+                {# Render the rest of the fields normally #}
+                <div class="mb-3">
+                    {{ form.fecha_pago.label_tag }}
+                    {{ form.fecha_pago }}
+                </div>
+                <div class="mb-3">
+                    {{ form.numero_referencia.label_tag }}
+                    {{ form.numero_referencia }}
+                </div>
+                <div class="mb-3">
+                    {{ form.tipo_transaccion.label_tag }}
+                    {{ form.tipo_transaccion }}
+                </div>
+                <div class="mb-3">
+                    {{ form.banco_emisor.label_tag }}
+                    {{ form.banco_emisor }}
+                </div>
+
                 <button type="submit" class="btn btn-primary w-100">Registrar Pago</button>
             </form>
 
@@ -25,4 +54,83 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<!-- flatpickr datepicker -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<!-- flatpickr Spanish locale -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    const search = document.getElementById('alumno_search');
+    const suggestions = document.getElementById('alumno_suggestions');
+    const alumnoSelect = document.querySelector('select[name="alumno"]');
+
+    if(!search || !alumnoSelect) return;
+
+    // Build a list of options in memory: {value, text}
+    const options = Array.from(alumnoSelect.options).map(opt => ({value: opt.value, text: opt.text.trim()})).filter(o => o.value);
+
+    function showSuggestions(filtered){
+        suggestions.innerHTML = '';
+        if(!filtered.length){ suggestions.style.display = 'none'; return; }
+        filtered.forEach(item => {
+            const a = document.createElement('a');
+            a.href = '#';
+            a.className = 'list-group-item list-group-item-action';
+            a.textContent = item.text;
+            a.dataset.value = item.value;
+            a.addEventListener('click', function(e){
+                e.preventDefault();
+                // set select value
+                alumnoSelect.value = this.dataset.value;
+                // set visible input to the chosen label
+                search.value = this.textContent;
+                suggestions.style.display = 'none';
+            });
+            suggestions.appendChild(a);
+        });
+        suggestions.style.display = 'block';
+    }
+
+    function filterOptions(term){
+        const t = term.trim().toLowerCase();
+        if(!t) return options.slice(0, 20); // show top 20 when empty
+        return options.filter(o => o.text.toLowerCase().includes(t)).slice(0,50);
+    }
+
+    let timer = null;
+    search.addEventListener('input', function(){
+        clearTimeout(timer);
+        timer = setTimeout(()=>{
+            const filtered = filterOptions(this.value);
+            showSuggestions(filtered);
+        }, 150);
+    });
+
+    // Close suggestions on outside click
+    document.addEventListener('click', function(e){
+        if(!suggestions.contains(e.target) && e.target !== search){
+            suggestions.style.display = 'none';
+        }
+    });
+});
+</script>
+<script>
+// Initialize flatpickr on the fecha_pago input if present
+document.addEventListener('DOMContentLoaded', function(){
+    var el = document.getElementById('fecha_pago_input') || document.querySelector('input[name="fecha_pago"]');
+    if(el){
+        flatpickr(el, {
+            dateFormat: 'Y-m-d',
+            allowInput: true,
+            altInput: true,
+            altFormat: 'd/m/Y',
+            locale: 'es'
+        });
+    }
+});
+</script>
 {% endblock %}

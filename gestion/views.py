@@ -18,6 +18,7 @@ from openpyxl.styles import PatternFill
 from .models import SessionDay
 from typing import cast
 import re
+import json
 
 # Create your views here.
 
@@ -27,7 +28,42 @@ def get_current_week():
 
 @login_required
 def index(request):
-    return render(request, "index.html")
+    # Build display name from first and last name (fall back to full_name or username)
+    fname = (request.user.first_name or "").strip()
+    lname = (request.user.last_name or "").strip()
+    display_name = (f"{fname} {lname}".strip())
+    if not display_name:
+        # try get_full_name or username
+        display_name = request.user.get_full_name() or request.user.username
+
+    # Users per role (use roles defined in the Usuario model)
+    roles = [
+        ("ALUMNO", "Alumnos"),
+        ("ENTRENADOR", "Entrenadores"),
+        ("ASISTENTE", "Asistentes"),
+        ("ADMINISTRADOR", "Administradores"),
+    ]
+    users_labels = [label for _, label in roles]
+    users_counts = [Usuario.objects.filter(rol=role).count() for role, _ in roles]
+
+    # Sessions per day for current ISO week (Mon..Sun)
+    weeknum = get_current_week()[1]
+    current_year = date.today().year
+    try:
+        days = [date.fromisocalendar(current_year, weeknum, d) for d in range(1, 8)]
+    except Exception:
+        days = []
+    sessions_counts = [SessionDay.objects.filter(fecha=d, active=True).count() for d in days]
+
+    context = {
+        "user_display_name": display_name,
+        # JSON-encode arrays so the template can inject them directly into JS
+        "users_labels_json": json.dumps(users_labels, ensure_ascii=False),
+        "users_counts_json": json.dumps(users_counts),
+        "sessions_labels_json": json.dumps(["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"], ensure_ascii=False),
+        "sessions_counts_json": json.dumps(sessions_counts),
+    }
+    return render(request, "index.html", context)
 
 
 @login_required
