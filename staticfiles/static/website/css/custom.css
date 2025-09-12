@@ -1,0 +1,35 @@
+/* Custom theme overrides: switch primary color to orange */
+:root{
+  --bs-primary: #ff7a00;
+  --bs-primary-rgb: 255,122,0;
+  --lr-primary: #ff7a00;
+  --lr-primary-dark: #ff4a00;
+}
+
+.btn-primary{
+  background-color: var(--lr-primary) !important;
+  border-color: var(--lr-primary) !important;
+  color: #fff !important;
+}
+.btn-primary:hover, .btn-primary:focus{
+  background-color: var(--lr-primary-dark) !important;
+  border-color: var(--lr-primary-dark) !important;
+}
+
+.bg-primary{background-color: var(--lr-primary) !important;}
+.text-primary{color: var(--lr-primary) !important;}
+
+/* Ensure links/buttons on primary background are readable */
+.sidebar .nav-link, .sidebar .nav-item, .sidebar .sidebar-brand-text{
+  color: #fff !important;
+}
+
+/* small helpers */
+.border-primary{border-color: var(--lr-primary) !important}
+
+/* keep btn-outline-primary readable */
+.btn-outline-primary{
+  color: var(--lr-primary) !important;
+  border-color: var(--lr-primary) !important;
+}
+.btn-outline-primary:hover{background-color: rgba(var(--bs-primary-rgb),0.08) !important;}
