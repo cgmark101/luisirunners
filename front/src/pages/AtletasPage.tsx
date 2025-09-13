@@ -17,6 +17,7 @@ const AtletasPage: React.FC = () => {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [showEdit, setShowEdit] = useState<null | Usuario>(null);
   const [showDelete, setShowDelete] = useState<null | Usuario>(null);
@@ -44,6 +45,19 @@ const AtletasPage: React.FC = () => {
         else setGrupos([]);
       })
       .catch(() => setGrupos([]));
+  }, []);
+
+  // Detect mobile to adapt pagination (1 neighbor on mobile, 2 on desktop)
+  useEffect(() => {
+    const m = window.matchMedia('(max-width: 640px)');
+    const update = () => setIsMobile(m.matches);
+    update();
+    if (m.addEventListener) m.addEventListener('change', update);
+    else m.addListener(update);
+    return () => {
+      if (m.removeEventListener) m.removeEventListener('change', update);
+      else m.removeListener(update);
+    };
   }, []);
 
   // Handlers
@@ -194,18 +208,20 @@ const AtletasPage: React.FC = () => {
                       <TableCell className="px-5 py-4 sm:px-6 text-start text-gray-500 text-theme-sm dark:text-gray-400">{Array.isArray(grupos) ? grupos.find(g => g.id === a.grupo)?.nombre || '-' : '-'}</TableCell>
                       <TableCell className="px-5 py-4 sm:px-6 text-start text-gray-500 text-theme-sm dark:text-gray-400">{a.rol !== 'inactive' ? 'Sí' : 'No'}</TableCell>
                       <TableCell className="px-5 py-4 sm:px-6 text-start">
-                        <button
-                          className="inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium bg-black/10 dark:bg-white/10 text-gray-700 dark:text-gray-200 transition"
-                          onClick={() => { setShowEdit(a); setForm(a); }}
-                        >
-                          Editar
-                        </button>
-                        <button
-                          className="inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium ml-2 bg-red-50/80 dark:bg-red-400/10 text-red-600 border border-red-400 hover:bg-red-100 dark:hover:bg-red-400/20 transition"
-                          onClick={() => setShowDelete(a)}
-                        >
-                          Eliminar
-                        </button>
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                          <button
+                            className="inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium bg-black/10 dark:bg-white/10 text-gray-700 dark:text-gray-200 transition w-full sm:w-auto"
+                            onClick={() => { setShowEdit(a); setForm(a); }}
+                          >
+                            Editar
+                          </button>
+                          <button
+                            className="inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium sm:ml-2 bg-red-50/80 dark:bg-red-400/10 text-red-600 border border-red-400 hover:bg-red-100 dark:hover:bg-red-400/20 transition w-full sm:w-auto"
+                            onClick={() => setShowDelete(a)}
+                          >
+                            Eliminar
+                          </button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))
@@ -222,81 +238,151 @@ const AtletasPage: React.FC = () => {
           if (totalPages <= 1) return null;
           const pages: (number | string)[] = [];
           const add = (n: number | string) => pages.push(n);
+          const neighborRange = isMobile ? 2 : 3; // neighbors around current page (mobile:2, desktop:3)
           // Siempre mostrar primera página
           add(1);
-          // Si hay salto entre 1 y la actual -2, mostrar ...
-          if (page > 4) add('...');
-          // Mostrar hasta 2 antes y 2 después de la actual
-          for (let i = Math.max(2, page - 2); i <= Math.min(totalPages - 1, page + 2); i++) {
+          // Si hay salto relevante entre 1 y la primera de la ventana central, mostrar ...
+          if (page > 2 + neighborRange) add('...');
+          // Mostrar ventana central alrededor de la página actual
+          for (let i = Math.max(2, page - neighborRange); i <= Math.min(totalPages - 1, page + neighborRange); i++) {
             add(i);
           }
-          // Si hay salto entre la actual +2 y la última, mostrar ...
-          if (page < totalPages - 3) add('...');
+          // Si hay salto entre la última de la ventana central y la última página, mostrar ...
+          if (page < totalPages - (1 + neighborRange)) add('...');
           // Siempre mostrar última página si hay más de una
           if (totalPages > 1) add(totalPages);
 
           return (
             <>
-              {/* Doble chevron izquierda (primera) */}
-              <Button
-                size="sm"
-                variant="outline"
-                className="mx-1 px-2"
-                onClick={() => setPage(1)}
-                disabled={page === 1}
-                aria-label="Primera página"
-              >
-                <FiChevronsLeft className="w-5 h-5" />
-              </Button>
-              {/* Anterior */}
-              <Button
-                size="sm"
-                variant="outline"
-                className="mx-1 px-2"
-                onClick={() => setPage(page - 1)}
-                disabled={page === 1}
-                aria-label="Anterior"
-              >
-                <FiChevronLeft className="w-5 h-5" />
-              </Button>
-              {/* Números y puntos */}
-              {pages.map((p, idx) =>
-                typeof p === 'number' ? (
+              {isMobile ? (
+                <div className="flex flex-col items-center w-full">
+                  {/* Row: numbers (and ellipsis) */}
+                  <div className="flex flex-wrap justify-center gap-0.5 items-center w-full mb-2">
+                    {pages.map((p, idx) =>
+                      typeof p === 'number' ? (
+                        <Button
+                          key={p}
+                          size="sm"
+                          variant={page === p ? "primary" : "outline"}
+                          className="mx-0.5 px-2 py-0.5 text-sm border-gray-200 shadow-sm"
+                          onClick={() => setPage(p)}
+                        >
+                          {p}
+                        </Button>
+                      ) : (
+                        <span key={"ellipsis-" + idx} className="px-2 text-gray-400 select-none">...</span>
+                      )
+                    )}
+                  </div>
+
+                  {/* Row: chevrons below numbers */}
+                  <div className="flex justify-center gap-0.5 items-center w-full">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="mx-0.5 px-2 py-0.5 border-gray-200 shadow-sm"
+                      onClick={() => setPage(1)}
+                      disabled={page === 1}
+                      aria-label="Primera página"
+                    >
+                      <FiChevronsLeft className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="mx-0.5 px-2 py-0.5 border-gray-200 shadow-sm"
+                      onClick={() => setPage(page - 1)}
+                      disabled={page === 1}
+                      aria-label="Anterior"
+                    >
+                      <FiChevronLeft className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="mx-0.5 px-2 py-0.5 border-gray-200 shadow-sm"
+                      onClick={() => setPage(page + 1)}
+                      disabled={page === totalPages}
+                      aria-label="Siguiente"
+                    >
+                      <FiChevronRight className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="mx-0.5 px-2 py-0.5 border-gray-200 shadow-sm"
+                      onClick={() => setPage(totalPages)}
+                      disabled={page === totalPages}
+                      aria-label="Última página"
+                    >
+                      <FiChevronsRight className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {/* Doble chevron izquierda (primera) */}
                   <Button
-                    key={p}
                     size="sm"
-                    variant={page === p ? "primary" : "outline"}
-                    className="mx-1"
-                    onClick={() => setPage(p)}
+                    variant="outline"
+                    className="mx-1 px-2"
+                    onClick={() => setPage(1)}
+                    disabled={page === 1}
+                    aria-label="Primera página"
                   >
-                    {p}
+                    <FiChevronsLeft className="w-5 h-5" />
                   </Button>
-                ) : (
-                  <span key={"ellipsis-" + idx} className="px-2 text-gray-400 select-none">...</span>
-                )
+                  {/* Anterior */}
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="mx-1 px-2"
+                    onClick={() => setPage(page - 1)}
+                    disabled={page === 1}
+                    aria-label="Anterior"
+                  >
+                    <FiChevronLeft className="w-5 h-5" />
+                  </Button>
+                  {/* Números y puntos */}
+                  {pages.map((p, idx) =>
+                    typeof p === 'number' ? (
+                      <Button
+                        key={p}
+                        size="sm"
+                        variant={page === p ? "primary" : "outline"}
+                        className="mx-1"
+                        onClick={() => setPage(p)}
+                      >
+                        {p}
+                      </Button>
+                    ) : (
+                      <span key={"ellipsis-" + idx} className="px-2 text-gray-400 select-none">...</span>
+                    )
+                  )}
+                  {/* Chevron derecha (siguiente) */}
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="mx-1 px-2"
+                    onClick={() => setPage(page + 1)}
+                    disabled={page === totalPages}
+                    aria-label="Siguiente"
+                  >
+                    <FiChevronRight className="w-5 h-5" />
+                  </Button>
+                  {/* Última */}
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="mx-1 px-2"
+                    onClick={() => setPage(totalPages)}
+                    disabled={page === totalPages}
+                    aria-label="Última página"
+                  >
+                    <FiChevronsRight className="w-5 h-5" />
+                  </Button>
+                </>
               )}
-              {/* Chevron derecha (siguiente) */}
-              <Button
-                size="sm"
-                variant="outline"
-                className="mx-1 px-2"
-                onClick={() => setPage(page + 1)}
-                disabled={page === totalPages}
-                aria-label="Siguiente"
-              >
-                <FiChevronRight className="w-5 h-5" />
-              </Button>
-              {/* Última */}
-              <Button
-                size="sm"
-                variant="outline"
-                className="mx-1 px-2"
-                onClick={() => setPage(totalPages)}
-                disabled={page === totalPages}
-                aria-label="Última página"
-              >
-                <FiChevronsRight className="w-5 h-5" />
-              </Button>
             </>
           );
         })()}
@@ -331,9 +417,9 @@ const AtletasPage: React.FC = () => {
               {grupos.map(g => <option key={g.id} value={g.id}>{g.nombre}</option>)}
             </select>
 
-            <div className="flex justify-end gap-2">
-              <Button onClick={handleAdd}>Crear</Button>
-              <Button variant="outline" onClick={() => setShowAdd(false)}>Cancelar</Button>
+            <div className="flex flex-col sm:flex-row justify-end gap-2">
+              <Button className="w-full sm:w-auto" onClick={handleAdd}>Crear</Button>
+              <Button variant="outline" className="w-full sm:w-auto" onClick={() => setShowAdd(false)}>Cancelar</Button>
             </div>
           </div>
         </ComponentCard>
@@ -368,9 +454,9 @@ const AtletasPage: React.FC = () => {
               {grupos.map(g => <option key={g.id} value={g.id}>{g.nombre}</option>)}
             </select>
 
-            <div className="flex justify-end gap-2">
-              <Button onClick={handleEdit}>Guardar</Button>
-              <Button variant="outline" onClick={() => { setShowEdit(null); setForm({}); }}>Cancelar</Button>
+            <div className="flex flex-col sm:flex-row justify-end gap-2">
+              <Button className="w-full sm:w-auto" onClick={handleEdit}>Guardar</Button>
+              <Button variant="outline" className="w-full sm:w-auto" onClick={() => { setShowEdit(null); setForm({}); }}>Cancelar</Button>
             </div>
           </div>
         </ComponentCard>

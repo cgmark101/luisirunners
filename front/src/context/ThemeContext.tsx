@@ -1,5 +1,6 @@
 "use client";
 
+/* eslint-disable react-refresh/only-export-components */
 import type React from "react";
 import { createContext, useState, useContext, useEffect } from "react";
 
