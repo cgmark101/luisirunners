@@ -27,9 +27,9 @@ SECRET_KEY = "django-insecure-8ouq#fmvhip+beuhidnz8sn=ess&r$2^=vlcz9h1f_l84b3l_o
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["luisi.run", "localhost", "127.0.0.1", ".vercel.app"]
-CSRF_TRUSTED_ORIGINS = ["https://luisi.run", "http://localhost:5173"]
-CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
+ALLOWED_HOSTS = ["luisi.run", "localhost", "127.0.0.1", ".vercel.app", "192.168.1.106", "192.168.1.111"]
+CSRF_TRUSTED_ORIGINS = ["https://luisi.run", "http://localhost:5173", "http://192.168.1.111:5173", "http://192.168.1.111"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:5173", "https://luisi.run", "http://192.168.1.111:5173", "http://192.168.1.111"]
 
 # Application definition
 

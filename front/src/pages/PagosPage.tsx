@@ -7,9 +7,13 @@ import { listPagos, createPago, updatePago, deletePago } from "../services/pago.
 import { listUsers } from "../services/user.service";
 import { Pago, Usuario, PageResult } from "../types/api";
 import LoadingSpinner from "../components/common/LoadingSpinner";
-import DatePicker from "react-datepicker";
+import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import "../styles/react-datepicker-dark.css";
 import { parseISO, format } from 'date-fns';
+import { es } from 'date-fns/locale/es';
+
+registerLocale('es', es);
 import ComponentCard from "../components/common/ComponentCard";
 
 const PAGE_SIZE = 25;
@@ -41,6 +45,8 @@ const PagosPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const fileInputAddRef = useRef<HTMLInputElement | null>(null);
   const fileInputEditRef = useRef<HTMLInputElement | null>(null);
+  const dateAddWrapperRef = useRef<HTMLDivElement | null>(null);
+  const dateEditWrapperRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -156,6 +162,10 @@ const PagosPage: React.FC = () => {
       await createPago(fd);
       setShowAdd(false);
       setForm({});
+      // Refresh list and go to first page so the new pago is visible
+      const res = await listPagos({ page: 1, page_size: PAGE_SIZE });
+      setPagos(res.results);
+      setTotal(res.count);
       setPage(1);
     } catch {
       setError("Error creando pago");
@@ -341,7 +351,7 @@ const PagosPage: React.FC = () => {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Alumno</label>
                 <input
                   placeholder="Busca atleta"
-                  className="w-full px-4 py-2 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500"
+                  className="w-full px-4 py-2 h-10 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500"
                   value={alumnoQuery}
                   onChange={e => {
                     const q = e.target.value;
@@ -362,27 +372,43 @@ const PagosPage: React.FC = () => {
                 )}
               </div>
 
-              <div>
+              <div ref={dateAddWrapperRef}>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fecha pago</label>
-                <div>
+                <div className="mb-0 w-full">
                   <DatePicker
                     selected={form.fecha_pago ? parseISO(form.fecha_pago) : null}
                     onChange={(d: Date | null) => setForm(f => ({ ...f, fecha_pago: d ? format(d, 'yyyy-MM-dd') : '' }))}
-                    className="w-full px-4 py-2 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500"
+                    className="block w-full px-4 py-2 h-10 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500"
+                    calendarClassName="react-datepicker-custom"
+                    locale={es}
                     dateFormat="yyyy-MM-dd"
                     placeholderText="Seleccionar fecha"
+                    onCalendarOpen={() => {
+                      // blur active element to close mobile keyboard
+                      try {
+                        (document.activeElement as HTMLElement | null)?.blur();
+                      } catch {
+                        // noop
+                      }
+                      // ensure the picker is visible on small screens
+                      setTimeout(() => {
+                        if (dateAddWrapperRef.current && 'scrollIntoView' in dateAddWrapperRef.current) {
+                          dateAddWrapperRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                      }, 50);
+                    }}
                   />
                 </div>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Número de referencia</label>
-                <input className="w-full px-4 py-2 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500" value={form.numero_referencia || ''} onChange={e => setForm(f => ({ ...f, numero_referencia: e.target.value }))} />
+                <input className="w-full px-4 py-2 h-10 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500" value={form.numero_referencia || ''} onChange={e => setForm(f => ({ ...f, numero_referencia: e.target.value }))} />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo transacción</label>
-                <select className="w-full px-4 py-2 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500" value={form.tipo_transaccion || ''} onChange={e => {
+                <select className="w-full px-4 py-2 h-10 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500" value={form.tipo_transaccion || ''} onChange={e => {
                   const val = e.target.value;
                   setForm(f => ({ ...f, tipo_transaccion: val, banco_emisor: (val === 'PAGO_MOVIL' || val === 'TRANSFERENCIA' || val === 'DEPOSITO') ? f.banco_emisor : null }));
                 }}>
@@ -394,7 +420,7 @@ const PagosPage: React.FC = () => {
               {(form.tipo_transaccion === 'PAGO_MOVIL' || form.tipo_transaccion === 'TRANSFERENCIA' || form.tipo_transaccion === 'DEPOSITO') && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Banco emisor</label>
-                  <select className="w-full px-4 py-2 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500" value={form.banco_emisor || ''} onChange={e => setForm(f => ({ ...f, banco_emisor: e.target.value || null }))}>
+                  <select className="w-full px-4 py-2 h-10 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500" value={form.banco_emisor || ''} onChange={e => setForm(f => ({ ...f, banco_emisor: e.target.value || null }))}>
                     <option value="">Sin banco</option>
                     {BANCOS_CHOICES.map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                   </select>
@@ -405,7 +431,7 @@ const PagosPage: React.FC = () => {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Captura comprobante</label>
                 <input ref={fileInputAddRef} type="file" className="hidden" onChange={e => setForm(f => ({ ...f, captura_comprobante_file: e.target.files?.[0] }))} />
                 <div className="flex items-center gap-3">
-                  <button type="button" className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700" onClick={() => fileInputAddRef.current?.click()}>Elegir archivo</button>
+                  <button type="button" className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700" onClick={() => fileInputAddRef.current?.click()}>Abrir</button>
                   <div className="text-sm text-gray-700 dark:text-gray-300">{form.captura_comprobante_file ? form.captura_comprobante_file.name : 'No se ha seleccionado ningún archivo'}</div>
                 </div>
               </div>
@@ -429,27 +455,41 @@ const PagosPage: React.FC = () => {
                 <div className="mb-3 text-sm text-gray-700 dark:text-gray-300">{typeof form.alumno === 'number' ? (alumnos.find(a => a.id === form.alumno)?.first_name ?? '') + ' ' + (alumnos.find(a => a.id === form.alumno)?.last_name ?? '') : `${(form.alumno as Usuario)?.first_name || ''} ${(form.alumno as Usuario)?.last_name || ''}`}</div>
               </div>
 
-              <div>
+              <div ref={dateEditWrapperRef}>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fecha pago</label>
-                <div>
+                <div className="mb-0 w-full">
                   <DatePicker
                     selected={form.fecha_pago ? parseISO(form.fecha_pago) : null}
                     onChange={(d: Date | null) => setForm(f => ({ ...f, fecha_pago: d ? format(d, 'yyyy-MM-dd') : '' }))}
-                    className="w-full px-4 py-2 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500"
+                    className="block w-full px-4 py-2 h-10 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500"
+                    calendarClassName="react-datepicker-custom"
+                    locale={es}
                     dateFormat="yyyy-MM-dd"
                     placeholderText="Seleccionar fecha"
+                    onCalendarOpen={() => {
+                      try {
+                        (document.activeElement as HTMLElement | null)?.blur();
+                      } catch {
+                        // noop
+                      }
+                      setTimeout(() => {
+                        if (dateEditWrapperRef.current && 'scrollIntoView' in dateEditWrapperRef.current) {
+                          dateEditWrapperRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                      }, 50);
+                    }}
                   />
                 </div>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Número de referencia</label>
-                <input className="w-full px-4 py-2 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500" value={form.numero_referencia || ''} onChange={e => setForm(f => ({ ...f, numero_referencia: e.target.value }))} />
+                <input className="w-full px-4 py-2 h-10 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500" value={form.numero_referencia || ''} onChange={e => setForm(f => ({ ...f, numero_referencia: e.target.value }))} />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tipo transacción</label>
-                <select className="w-full px-4 py-2 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500" value={form.tipo_transaccion || ''} onChange={e => {
+                <select className="w-full px-4 py-2 h-10 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500" value={form.tipo_transaccion || ''} onChange={e => {
                   const val = e.target.value;
                   setForm(f => ({ ...f, tipo_transaccion: val, banco_emisor: (val === 'PAGO_MOVIL' || val === 'TRANSFERENCIA' || val === 'DEPOSITO') ? f.banco_emisor : null }));
                 }}>
@@ -461,7 +501,7 @@ const PagosPage: React.FC = () => {
               {(form.tipo_transaccion === 'PAGO_MOVIL' || form.tipo_transaccion === 'TRANSFERENCIA' || form.tipo_transaccion === 'DEPOSITO') && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Banco emisor</label>
-                  <select className="w-full px-4 py-2 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500" value={form.banco_emisor || ''} onChange={e => setForm(f => ({ ...f, banco_emisor: e.target.value || null }))}>
+                  <select className="w-full px-4 py-2 h-10 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500" value={form.banco_emisor || ''} onChange={e => setForm(f => ({ ...f, banco_emisor: e.target.value || null }))}>
                     <option value="">Sin banco</option>
                     {BANCOS_CHOICES.map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                   </select>
@@ -472,7 +512,7 @@ const PagosPage: React.FC = () => {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Captura comprobante</label>
                 <input ref={fileInputEditRef} type="file" className="hidden" onChange={e => setForm(f => ({ ...f, captura_comprobante_file: e.target.files?.[0] }))} />
                 <div className="flex items-center gap-3">
-                  <button type="button" className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700" onClick={() => fileInputEditRef.current?.click()}>Elegir archivo</button>
+                  <button type="button" className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700" onClick={() => fileInputEditRef.current?.click()}>Abrir</button>
                   <div className="text-sm text-gray-700 dark:text-gray-300">{form.captura_comprobante_file ? form.captura_comprobante_file.name : 'No se ha seleccionado ningún archivo'}</div>
                 </div>
               </div>

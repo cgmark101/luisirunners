@@ -1,0 +1,42 @@
+.react-datepicker-custom {
+  /* base tweaks */
+  border-radius: 6px;
+}
+
+/* Dark mode overrides when tailwind 'dark' class is present on root */
+.dark .react-datepicker-custom,
+.dark .react-datepicker {
+  background: #0b1220; /* dark panel */
+  color: #e6eef8;
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+}
+
+.dark .react-datepicker__header {
+  background: transparent;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.dark .react-datepicker__current-month,
+.dark .react-datepicker__day-name,
+.dark .react-datepicker__day {
+  color: #cbd5e1;
+}
+
+.dark .react-datepicker__day--selected,
+.dark .react-datepicker__day--keyboard-selected {
+  background-color: #4f46e5 !important; /* indigo-600 */
+  color: #fff !important;
+}
+
+.dark .react-datepicker__day--today {
+  color: #60a5fa;
+}
+
+.dark .react-datepicker__triangle {
+  display: none;
+}
+
+.react-datepicker__navigation--previous, .react-datepicker__navigation--next {
+  top: 10px;
+}
