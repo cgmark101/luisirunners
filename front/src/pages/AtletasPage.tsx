@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Table, TableHeader, TableBody, TableRow, TableCell } from "../components/ui/table";
 import { Modal } from "../components/ui/modal";
 import Button from "../components/ui/button/Button";
+import { FiChevronsLeft, FiChevronLeft, FiChevronRight, FiChevronsRight } from "react-icons/fi";
 import { listUsers, createUser, updateUser, deleteUser } from "../services/user.service";
 import { listGrupos } from "../services/grupo.service";
 import { Usuario, Grupo, PageResult } from "../types/api";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 25;
 
 const AtletasPage: React.FC = () => {
   const [atletas, setAtletas] = useState<Usuario[]>([]);
@@ -35,7 +36,13 @@ const AtletasPage: React.FC = () => {
 
   // Fetch grupos
   useEffect(() => {
-    listGrupos().then(setGrupos);
+    listGrupos()
+      .then((res: PageResult<Grupo> | Grupo[]) => {
+        if (Array.isArray(res)) setGrupos(res);
+        else if (res && Array.isArray(res.results)) setGrupos(res.results);
+        else setGrupos([]);
+      })
+      .catch(() => setGrupos([]));
   }, []);
 
   // Handlers
@@ -86,62 +93,148 @@ const AtletasPage: React.FC = () => {
   return (
     <div className="p-4">
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold">Atletas</h1>
+  <h1 className="text-2xl font-bold text-gray-800 dark:text-white/90">Atletas</h1>
         <Button onClick={() => setShowAdd(true)}>Agregar atleta</Button>
       </div>
       {error && <div className="mb-2 text-red-600">{error}</div>}
       {loading ? (
         <LoadingSpinner />
       ) : (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableCell isHeader>#</TableCell>
-              <TableCell isHeader>Nombre</TableCell>
-              <TableCell isHeader>Grupo</TableCell>
-              <TableCell isHeader>Activo</TableCell>
-              <TableCell isHeader>Acciones</TableCell>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {atletas.length === 0 ? (
-              <TableRow>
-                <TableCell>No hay atletas registrados.</TableCell>
-                <TableCell>""</TableCell>
-                <TableCell>""</TableCell>
-                <TableCell>""</TableCell>
-                <TableCell>""</TableCell>
-              </TableRow>
-            ) : (
-              atletas.map((a, idx) => (
-                <TableRow key={a.id}>
-                  <TableCell>{(page - 1) * PAGE_SIZE + idx + 1}</TableCell>
-                  <TableCell>{a.first_name} {a.last_name}</TableCell>
-                  <TableCell>{grupos.find(g => g.id === a.grupo)?.nombre || '-'}</TableCell>
-                  <TableCell>{a.rol !== 'inactive' ? 'Sí' : 'No'}</TableCell>
-                  <TableCell>
-                    <Button size="sm" variant="outline" onClick={() => { setShowEdit(a); setForm(a); }}>Editar</Button>
-                    <Button size="sm" variant="outline" className="ml-2 text-red-600 border-red-400 hover:bg-red-50" onClick={() => setShowDelete(a)}>Eliminar</Button>
-                  </TableCell>
+        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+          <div className="max-w-full overflow-x-auto">
+            <Table>
+              <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+                <TableRow>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">#</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Nombre</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Grupo</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Activo</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Acciones</TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+              </TableHeader>
+              <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                {atletas.filter(a => a.grupo).length === 0 ? (
+                  <TableRow>
+                    <TableCell className="px-5 py-4 font-medium text-gray-500 dark:text-gray-400 dark:bg-white/[0.03] bg-white">No hay atletas registrados.</TableCell>
+                    <TableCell className="px-5 py-4 dark:bg-white/[0.03] bg-white">""</TableCell>
+                    <TableCell className="px-5 py-4 dark:bg-white/[0.03] bg-white">""</TableCell>
+                    <TableCell className="px-5 py-4 dark:bg-white/[0.03] bg-white">""</TableCell>
+                    <TableCell className="px-5 py-4 dark:bg-white/[0.03] bg-white">""</TableCell>
+                  </TableRow>
+                ) : (
+                  atletas.filter(a => a.grupo).map((a, idx) => (
+                    <TableRow key={a.id}>
+                      <TableCell className="px-5 py-4 sm:px-6 text-start text-gray-800 text-theme-sm dark:text-white/90">{(page - 1) * PAGE_SIZE + idx + 1}</TableCell>
+                      <TableCell className="px-5 py-4 sm:px-6 text-start text-gray-800 text-theme-sm dark:text-white/90">{a.first_name} {a.last_name}</TableCell>
+                      <TableCell className="px-5 py-4 sm:px-6 text-start text-gray-500 text-theme-sm dark:text-gray-400">{Array.isArray(grupos) ? grupos.find(g => g.id === a.grupo)?.nombre || '-' : '-'}</TableCell>
+                      <TableCell className="px-5 py-4 sm:px-6 text-start text-gray-500 text-theme-sm dark:text-gray-400">{a.rol !== 'inactive' ? 'Sí' : 'No'}</TableCell>
+                      <TableCell className="px-5 py-4 sm:px-6 text-start">
+                        <button
+                          className="inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium bg-black/10 dark:bg-white/10 text-gray-700 dark:text-gray-200 transition"
+                          onClick={() => { setShowEdit(a); setForm(a); }}
+                        >
+                          Editar
+                        </button>
+                        <button
+                          className="inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium ml-2 bg-red-50/80 dark:bg-red-400/10 text-red-600 border border-red-400 hover:bg-red-100 dark:hover:bg-red-400/20 transition"
+                          onClick={() => setShowDelete(a)}
+                        >
+                          Eliminar
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
       )}
-      {/* Paginación */}
-      <div className="flex justify-center mt-4">
-        {Array.from({ length: Math.ceil(total / PAGE_SIZE) }, (_, i) => (
-          <Button
-            key={i}
-            size="sm"
-            variant={page === i + 1 ? "primary" : "outline"}
-            className="mx-1"
-            onClick={() => setPage(i + 1)}
-          >
-            {i + 1}
-          </Button>
-        ))}
+      {/* Paginación dinámica con chevrones */}
+      <div className="flex justify-center mt-4 gap-1 items-center">
+        {(() => {
+          const totalPages = Math.ceil(total / PAGE_SIZE);
+          if (totalPages <= 1) return null;
+          const pages: (number | string)[] = [];
+          const add = (n: number | string) => pages.push(n);
+          // Siempre mostrar primera página
+          add(1);
+          // Si hay salto entre 1 y la actual -2, mostrar ...
+          if (page > 4) add('...');
+          // Mostrar hasta 2 antes y 2 después de la actual
+          for (let i = Math.max(2, page - 2); i <= Math.min(totalPages - 1, page + 2); i++) {
+            add(i);
+          }
+          // Si hay salto entre la actual +2 y la última, mostrar ...
+          if (page < totalPages - 3) add('...');
+          // Siempre mostrar última página si hay más de una
+          if (totalPages > 1) add(totalPages);
+
+          return (
+            <>
+              {/* Doble chevron izquierda (primera) */}
+              <Button
+                size="sm"
+                variant="outline"
+                className="mx-1 px-2"
+                onClick={() => setPage(1)}
+                disabled={page === 1}
+                aria-label="Primera página"
+              >
+                <FiChevronsLeft className="w-5 h-5" />
+              </Button>
+              {/* Anterior */}
+              <Button
+                size="sm"
+                variant="outline"
+                className="mx-1 px-2"
+                onClick={() => setPage(page - 1)}
+                disabled={page === 1}
+                aria-label="Anterior"
+              >
+                <FiChevronLeft className="w-5 h-5" />
+              </Button>
+              {/* Números y puntos */}
+              {pages.map((p, idx) =>
+                typeof p === 'number' ? (
+                  <Button
+                    key={p}
+                    size="sm"
+                    variant={page === p ? "primary" : "outline"}
+                    className="mx-1"
+                    onClick={() => setPage(p)}
+                  >
+                    {p}
+                  </Button>
+                ) : (
+                  <span key={"ellipsis-" + idx} className="px-2 text-gray-400 select-none">...</span>
+                )
+              )}
+              {/* Chevron derecha (siguiente) */}
+              <Button
+                size="sm"
+                variant="outline"
+                className="mx-1 px-2"
+                onClick={() => setPage(page + 1)}
+                disabled={page === totalPages}
+                aria-label="Siguiente"
+              >
+                <FiChevronRight className="w-5 h-5" />
+              </Button>
+              {/* Última */}
+              <Button
+                size="sm"
+                variant="outline"
+                className="mx-1 px-2"
+                onClick={() => setPage(totalPages)}
+                disabled={page === totalPages}
+                aria-label="Última página"
+              >
+                <FiChevronsRight className="w-5 h-5" />
+              </Button>
+            </>
+          );
+        })()}
       </div>
       {/* Modal agregar */}
       <Modal isOpen={showAdd} onClose={() => setShowAdd(false)}>
