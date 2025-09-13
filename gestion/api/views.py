@@ -9,9 +9,11 @@ from .serializers import (
     SessionDaySerializer,
     PagoSerializer,
 )
+from drf_spectacular.utils import extend_schema
 
 
 
+@extend_schema(tags=["Usuarios"])
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all().order_by("id")
     serializer_class = UsuarioSerializer
@@ -24,12 +26,14 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         return super().get_permissions()
 
 
+@extend_schema(tags=["Grupos"])
 class GrupoViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Grupo.objects.all().order_by("nombre")
     serializer_class = GrupoSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 
+@extend_schema(tags=["Asistencias"])
 class AsistenciaViewSet(viewsets.ModelViewSet):
     queryset = Asistencia.objects.all().order_by("-fecha")
     serializer_class = AsistenciaSerializer
@@ -47,6 +51,7 @@ class AsistenciaViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
+@extend_schema(tags=["SessionDays"])
 class SessionDayViewSet(viewsets.ModelViewSet):
     queryset = SessionDay.objects.all().order_by("-fecha")
     serializer_class = SessionDaySerializer
@@ -67,6 +72,7 @@ class SessionDayViewSet(viewsets.ModelViewSet):
         return Response(self.get_serializer(sd).data)
 
 
+@extend_schema(tags=["Pagos"])
 class PagoViewSet(viewsets.ModelViewSet):
     queryset = Pago.objects.all().order_by("-fecha_pago")
     serializer_class = PagoSerializer

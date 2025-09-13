@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 from django.views.generic import RedirectView
 
 urlpatterns = [
@@ -30,6 +31,10 @@ urlpatterns = [
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/", include("gestion.api.urls")),
+    # Schema / docs (drf-spectacular)
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("api/docs/swagger/", SpectacularSwaggerView.as_view(url_name='schema'), name="swagger-ui"),
+    path("api/docs/redoc/", SpectacularRedocView.as_view(url_name='schema'), name="redoc"),
     # Redirect root to /gestion/
     path("", RedirectView.as_view(url="/gestion/", permanent=False)),
     # Keep website urls available under / (if you need them, move this to a different prefix)
