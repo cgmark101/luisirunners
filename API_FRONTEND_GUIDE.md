@@ -191,15 +191,66 @@ Archivos de ejemplo y herramientas
 - Postman/Insomnia: crear colección con endpoints: /api/token/, /api/token/refresh/, /api/pagos/ (multipart).
 
 Opciones adicionales (puedo añadir)
-----------------------------------
-- A) Crear `src/api.ts` y `src/components` de ejemplo en React + TypeScript.
-- B) Generar una colección Postman JSON con ejemplos.
-- C) Crear un esquema OpenAPI/Swagger básico (esqueleto) basado en serializers.
 
----
 
 Ruta del archivo en el repo: `API_FRONTEND_GUIDE.md`
 
 He marcado la tarea como completada en el TODO.
 
 Dime si quieres que genere también la colección Postman o ejemplos de componentes React/TS y lo añado al repo.`
+
+Lista completa de endpoints
+--------------------------
+A continuación está la lista completa y práctica de rutas expuestas por la API (tal como están registradas por los routers y vistas actuales). Incluye verbo HTTP, path y notas rápidas.
+
+Autenticación (JWT)
+- POST /api/token/  — Obtener tokens. Body: { username, password } → { access, refresh }
+- POST /api/token/refresh/ — Renovar access. Body: { refresh } → { access }
+
+Usuarios (UsuarioViewSet - `users`)
+- GET /api/users/ — Listado paginado de usuarios. Query params: `page`, `page_size`.
+- POST /api/users/ — Crear usuario (restringido a admin; el serializer actual no espera `password` en la API pública).
+- GET /api/users/{id}/ — Recuperar usuario por id.
+- PUT /api/users/{id}/ — Reemplazar usuario.
+- PATCH /api/users/{id}/ — Actualizar parcialmente usuario.
+- DELETE /api/users/{id}/ — Eliminar usuario.
+
+Grupos (GrupoViewSet - `grupos`)
+- GET /api/grupos/ — Listado de grupos.
+- GET /api/grupos/{id}/ — Recuperar grupo.
+
+Asistencias (AsistenciaViewSet - `asistencias`)
+- GET /api/asistencias/ — Listado paginado de asistencias.
+- POST /api/asistencias/ — Crear asistencia. Body: { alumno, fecha (YYYY-MM-DD), presente, nota }. Prevents duplicate alumno+fecha.
+- GET /api/asistencias/{id}/ — Recuperar asistencia.
+- PUT /api/asistencias/{id}/ — Reemplazar asistencia.
+- PATCH /api/asistencias/{id}/ — Actualizar asistencia.
+- DELETE /api/asistencias/{id}/ — Eliminar asistencia.
+
+Session Days (SessionDayViewSet - `session-days`)
+- GET /api/session-days/ — Listado.
+- POST /api/session-days/ — Crear session day. Body: { grupo, fecha, active }
+- GET /api/session-days/{id}/ — Recuperar.
+- PUT /api/session-days/{id}/ — Reemplazar.
+- PATCH /api/session-days/{id}/ — Actualizar.
+- DELETE /api/session-days/{id}/ — Eliminar.
+- POST /api/session-days/{id}/activate/ — Acción custom (admin-only) para activar.
+- POST /api/session-days/{id}/deactivate/ — Acción custom (admin-only) para desactivar.
+
+Pagos (PagoViewSet - `pagos`)
+- GET /api/pagos/ — Listado paginado.
+- POST /api/pagos/ — Crear pago. Body (multipart/form-data para subir `captura_comprobante`):
+  - alumno (id), fecha_pago (YYYY-MM-DD), numero_referencia (string, UNIQUE), tipo_transaccion, banco_emisor (opcional), captura_comprobante (file, opcional).
+  - Respuestas comunes: 201 (creado), 400 con detalle de errores (p. ej. validación de imagen o referencia duplicada).
+- GET /api/pagos/{id}/ — Recuperar pago (captura_comprobante contiene URL si existe).
+- PUT /api/pagos/{id}/ — Reemplazar pago (puede incluir multipart para cambiar archivo).
+- PATCH /api/pagos/{id}/ — Actualizar parcialmente.
+- DELETE /api/pagos/{id}/ — Eliminar pago.
+
+Parámetros comunes y notas
+- Paginación: `?page=` y `?page_size=` (si se requiere mayor paginado, se puede añadir filtros en backend).
+- Para uploads: usar `Content-Type: multipart/form-data` con `FormData` desde el frontend.
+- Para peticiones autenticadas: enviar `Authorization: Bearer <access_token>`.
+- Errores 400 devuelven un JSON con claves de campo → mapear en el frontend para mostrar validaciones.
+
+Si quieres, puedo exportar esta lista en formato OpenAPI/Swagger (YAML) o en una colección Postman para importarla directamente en herramientas de frontend.
