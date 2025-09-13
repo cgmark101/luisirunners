@@ -1,0 +1,578 @@
+openapi: 3.0.3
+info:
+  title: Luisirunners API
+  version: 1.0.0
+  description: API pública para la aplicación Luisirunners — endpoints REST expuestos por Django REST Framework con JWT.
+servers:
+  - url: http://localhost:8000
+    description: Local dev server
+paths:
+  /api/token/:
+    post:
+      summary: Obtener tokens JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRequest'
+      responses:
+        '200':
+          description: Tokens devueltos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+  /api/token/refresh/:
+    post:
+      summary: Renovar access token con refresh
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshRequest'
+      responses:
+        '200':
+          description: Nuevo access token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access:
+                    type: string
+  /api/users/:
+    get:
+      summary: Listado de usuarios
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Lista paginada de usuarios
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserList'
+    post:
+      summary: Crear usuario (admin)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+      responses:
+        '201':
+          description: Usuario creado
+  /api/users/{id}/:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Recuperar usuario
+      responses:
+        '200':
+          description: Usuario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+    put:
+      summary: Reemplazar usuario
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+      responses:
+        '200':
+          description: Usuario actualizado
+    patch:
+      summary: Actualizar parcialmente usuario
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+      responses:
+        '200':
+          description: Usuario parcialmente actualizado
+    delete:
+      summary: Eliminar usuario
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Usuario eliminado
+  /api/grupos/:
+    get:
+      summary: Listado de grupos
+      responses:
+        '200':
+          description: Lista de grupos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Grupo'
+  /api/grupos/{id}/:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Recuperar grupo
+      responses:
+        '200':
+          description: Grupo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Grupo'
+  /api/asistencias/:
+    get:
+      summary: Listado de asistencias
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Lista paginada de asistencias
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsistenciaList'
+    post:
+      summary: Crear asistencia
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Asistencia'
+      responses:
+        '201':
+          description: Asistencia creada
+  /api/asistencias/{id}/:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Recuperar asistencia
+      responses:
+        '200':
+          description: Asistencia
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Asistencia'
+    put:
+      summary: Reemplazar asistencia
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Asistencia'
+      responses:
+        '200':
+          description: Asistencia actualizada
+    patch:
+      summary: Actualizar asistencia
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Asistencia'
+      responses:
+        '200':
+          description: Asistencia parcialmente actualizada
+    delete:
+      summary: Eliminar asistencia
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Asistencia eliminada
+  /api/session-days/:
+    get:
+      summary: Listado de session days
+      responses:
+        '200':
+          description: Lista de session days
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SessionDay'
+    post:
+      summary: Crear session day
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionDay'
+      responses:
+        '201':
+          description: SessionDay creado
+  /api/session-days/{id}/:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Recuperar session day
+      responses:
+        '200':
+          description: SessionDay
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionDay'
+    put:
+      summary: Reemplazar session day
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionDay'
+      responses:
+        '200':
+          description: SessionDay actualizado
+    patch:
+      summary: Actualizar session day
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionDay'
+      responses:
+        '200':
+          description: SessionDay parcialmente actualizado
+    delete:
+      summary: Eliminar session day
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: SessionDay eliminado
+  /api/session-days/{id}/activate/:
+    post:
+      summary: Activar session day
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: SessionDay activado
+  /api/session-days/{id}/deactivate/:
+    post:
+      summary: Desactivar session day
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: SessionDay desactivado
+  /api/pagos/:
+    get:
+      summary: Listado de pagos
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        '200':
+          description: Lista paginada de pagos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagoList'
+    post:
+      summary: Crear pago (multipart/form-data)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                alumno:
+                  type: integer
+                fecha_pago:
+                  type: string
+                  format: date
+                numero_referencia:
+                  type: string
+                tipo_transaccion:
+                  type: string
+                banco_emisor:
+                  type: string
+                captura_comprobante:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Pago creado
+  /api/pagos/{id}/:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Recuperar pago
+      responses:
+        '200':
+          description: Pago
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pago'
+    put:
+      summary: Reemplazar pago
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                alumno:
+                  type: integer
+                fecha_pago:
+                  type: string
+                  format: date
+                numero_referencia:
+                  type: string
+                tipo_transaccion:
+                  type: string
+                banco_emisor:
+                  type: string
+                captura_comprobante:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Pago reemplazado
+    patch:
+      summary: Actualizar parcialmente pago
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                alumno:
+                  type: integer
+                fecha_pago:
+                  type: string
+                  format: date
+                numero_referencia:
+                  type: string
+                tipo_transaccion:
+                  type: string
+                banco_emisor:
+                  type: string
+                captura_comprobante:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Pago actualizado
+    delete:
+      summary: Eliminar pago
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Pago eliminado
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    Page:
+      name: page
+      in: query
+      schema:
+        type: integer
+    PageSize:
+      name: page_size
+      in: query
+      schema:
+        type: integer
+  schemas:
+    TokenRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+        - username
+        - password
+    TokenResponse:
+      type: object
+      properties:
+        access:
+          type: string
+        refresh:
+          type: string
+    RefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+      required:
+        - refresh
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+    UserList:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+        previous:
+          type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Usuario'
+    Grupo:
+      type: object
+      properties:
+        id:
+          type: integer
+        nombre:
+          type: string
+    Asistencia:
+      type: object
+      properties:
+        id:
+          type: integer
+        alumno:
+          $ref: '#/components/schemas/Usuario'
+        fecha:
+          type: string
+          format: date
+        presente:
+          type: boolean
+        nota:
+          type: string
+    AsistenciaList:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+        previous:
+          type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Asistencia'
+    SessionDay:
+      type: object
+      properties:
+        id:
+          type: integer
+        grupo:
+          $ref: '#/components/schemas/Grupo'
+        fecha:
+          type: string
+          format: date
+        active:
+          type: boolean
+    Pago:
+      type: object
+      properties:
+        id:
+          type: integer
+        alumno:
+          $ref: '#/components/schemas/Usuario'
+        fecha_pago:
+          type: string
+          format: date
+        numero_referencia:
+          type: string
+        tipo_transaccion:
+          type: string
+        banco_emisor:
+          type: string
+        captura_comprobante:
+          type: string
+          format: uri
+    PagoList:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+        previous:
+          type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pago'
