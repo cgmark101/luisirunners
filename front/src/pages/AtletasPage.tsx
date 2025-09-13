@@ -7,6 +7,7 @@ import { listUsers, createUser, updateUser, deleteUser } from "../services/user.
 import { listGrupos } from "../services/grupo.service";
 import { Usuario, Grupo, PageResult } from "../types/api";
 import LoadingSpinner from "../components/common/LoadingSpinner";
+import ComponentCard from "../components/common/ComponentCard";
 
 const PAGE_SIZE = 25;
 
@@ -50,12 +51,49 @@ const AtletasPage: React.FC = () => {
     if (!form.first_name || !form.last_name || !form.grupo) return;
     setLoading(true);
     try {
-      await createUser(form);
+      // Ensure required fields for backend: username is required by the model/serializer
+      const makeUsername = () => {
+        const fn = (form.first_name || '').trim().toLowerCase().replace(/\s+/g, '');
+        const ln = (form.last_name || '').trim().toLowerCase().replace(/\s+/g, '');
+        const suffix = String(Date.now()).slice(-4);
+        return fn || ln ? `${fn || 'user'}.${ln || 'anon'}${suffix}` : `user${suffix}`;
+      };
+
+      const payload = {
+        ...form,
+        username: form.username || makeUsername(),
+      };
+
+      await createUser(payload);
       setShowAdd(false);
       setForm({});
       setPage(1);
-    } catch {
-      setError("Error creando atleta");
+    } catch (err: unknown) {
+      // Try to parse DRF field errors if available (axios error shape)
+      const parseAxiosError = (e: unknown) => {
+        const isRecord = (x: unknown): x is Record<string, unknown> => typeof x === 'object' && x !== null;
+        if (!isRecord(e)) return null;
+        const resp = e as Record<string, unknown>;
+        if (!isRecord(resp.response)) return null;
+        const rd = resp.response as Record<string, unknown>;
+        if (!isRecord(rd.data)) return null;
+        return rd.data;
+      };
+
+      const data = parseAxiosError(err);
+      if (!data) {
+        setError('Error creando atleta');
+      } else if (typeof data === 'string') {
+        setError(data);
+      } else if (typeof data === 'object') {
+        const parts: string[] = Object.entries(data).map(([k, v]) => {
+          if (Array.isArray(v)) return `${k}: ${v.join(', ')}`;
+          return `${k}: ${String(v)}`;
+        });
+        setError(parts.join(' · '));
+      } else {
+        setError('Error creando atleta');
+      }
     } finally {
       setLoading(false);
     }
@@ -68,7 +106,15 @@ const AtletasPage: React.FC = () => {
       await updateUser(showEdit.id, form);
       setShowEdit(null);
       setForm({});
-      setPage(1);
+      // Refetch current page to reflect changes immediately without forcing page reset
+      try {
+        const res = await listUsers({ page, page_size: PAGE_SIZE });
+        setAtletas(res.results);
+        setTotal(res.count);
+      } catch {
+        // fallback: go to first page if refetch fails
+        setPage(1);
+      }
     } catch {
       setError("Error editando atleta");
     } finally {
@@ -81,8 +127,27 @@ const AtletasPage: React.FC = () => {
     setLoading(true);
     try {
       await deleteUser(showDelete.id);
+      // After deleting, recalculate total and pages and refresh the list.
+      const newTotal = Math.max(0, total - 1);
+      const lastPage = Math.max(1, Math.ceil(newTotal / PAGE_SIZE));
+      const newPage = Math.min(page, lastPage);
+
       setShowDelete(null);
-      setPage(1);
+      setTotal(newTotal);
+
+      if (newPage !== page) {
+        // Move to a valid page (this will trigger the useEffect fetch)
+        setPage(newPage);
+      } else {
+        // Same page — re-fetch current page to update the list immediately
+        try {
+          const res = await listUsers({ page: newPage, page_size: PAGE_SIZE });
+          setAtletas(res.results);
+          setTotal(res.count);
+        } catch {
+          setError("Error actualizando lista de atletas");
+        }
+      }
     } catch {
       setError("Error eliminando atleta");
     } finally {
@@ -238,44 +303,89 @@ const AtletasPage: React.FC = () => {
       </div>
       {/* Modal agregar */}
       <Modal isOpen={showAdd} onClose={() => setShowAdd(false)}>
-        <h2 className="text-xl font-bold mb-4">Agregar atleta</h2>
-        <div className="mb-2">
-          <input className="form-control mb-2" placeholder="Nombre" value={form.first_name || ''} onChange={e => setForm(f => ({ ...f, first_name: e.target.value }))} />
-          <input className="form-control mb-2" placeholder="Apellido" value={form.last_name || ''} onChange={e => setForm(f => ({ ...f, last_name: e.target.value }))} />
-          <select className="form-control mb-2" value={form.grupo || ''} onChange={e => setForm(f => ({ ...f, grupo: Number(e.target.value) }))}>
-            <option value="">Seleccionar grupo</option>
-            {grupos.map(g => <option key={g.id} value={g.id}>{g.nombre}</option>)}
-          </select>
-        </div>
-        <div className="flex justify-end gap-2">
-          <Button onClick={handleAdd}>Crear</Button>
-          <Button variant="outline" onClick={() => setShowAdd(false)}>Cancelar</Button>
-        </div>
+        <ComponentCard title="Agregar atleta" desc="Rellena los campos para crear un nuevo atleta.">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre</label>
+            <input
+              className="w-full px-4 py-2 mb-3 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500"
+              placeholder="Nombre"
+              value={form.first_name || ''}
+              onChange={e => setForm(f => ({ ...f, first_name: e.target.value }))}
+            />
+
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Apellido</label>
+            <input
+              className="w-full px-4 py-2 mb-3 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500"
+              placeholder="Apellido"
+              value={form.last_name || ''}
+              onChange={e => setForm(f => ({ ...f, last_name: e.target.value }))}
+            />
+
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Grupo</label>
+            <select
+              className="w-full px-4 py-2 mb-3 rounded-md border border-gray-200 bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              value={form.grupo || ''}
+              onChange={e => setForm(f => ({ ...f, grupo: Number(e.target.value) }))}
+            >
+              <option value="">Seleccionar grupo</option>
+              {grupos.map(g => <option key={g.id} value={g.id}>{g.nombre}</option>)}
+            </select>
+
+            <div className="flex justify-end gap-2">
+              <Button onClick={handleAdd}>Crear</Button>
+              <Button variant="outline" onClick={() => setShowAdd(false)}>Cancelar</Button>
+            </div>
+          </div>
+        </ComponentCard>
       </Modal>
       {/* Modal editar */}
       <Modal isOpen={!!showEdit} onClose={() => { setShowEdit(null); setForm({}); }}>
-        <h2 className="text-xl font-bold mb-4">Editar atleta</h2>
-        <div className="mb-2">
-          <input className="form-control mb-2" placeholder="Nombre" value={form.first_name || ''} onChange={e => setForm(f => ({ ...f, first_name: e.target.value }))} />
-          <input className="form-control mb-2" placeholder="Apellido" value={form.last_name || ''} onChange={e => setForm(f => ({ ...f, last_name: e.target.value }))} />
-          <select className="form-control mb-2" value={form.grupo || ''} onChange={e => setForm(f => ({ ...f, grupo: Number(e.target.value) }))}>
-            <option value="">Seleccionar grupo</option>
-            {grupos.map(g => <option key={g.id} value={g.id}>{g.nombre}</option>)}
-          </select>
-        </div>
-        <div className="flex justify-end gap-2">
-          <Button onClick={handleEdit}>Guardar</Button>
-          <Button variant="outline" onClick={() => { setShowEdit(null); setForm({}); }}>Cancelar</Button>
-        </div>
+        <ComponentCard title="Editar atleta" desc="Actualiza los campos del atleta seleccionado.">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nombre</label>
+            <input
+              className="w-full px-4 py-2 mb-3 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500"
+              placeholder="Nombre"
+              value={form.first_name || ''}
+              onChange={e => setForm(f => ({ ...f, first_name: e.target.value }))}
+            />
+
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Apellido</label>
+            <input
+              className="w-full px-4 py-2 mb-3 rounded-md border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:ring-blue-500"
+              placeholder="Apellido"
+              value={form.last_name || ''}
+              onChange={e => setForm(f => ({ ...f, last_name: e.target.value }))}
+            />
+
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Grupo</label>
+            <select
+              className="w-full px-4 py-2 mb-3 rounded-md border border-gray-200 bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              value={form.grupo || ''}
+              onChange={e => setForm(f => ({ ...f, grupo: Number(e.target.value) }))}
+            >
+              <option value="">Seleccionar grupo</option>
+              {grupos.map(g => <option key={g.id} value={g.id}>{g.nombre}</option>)}
+            </select>
+
+            <div className="flex justify-end gap-2">
+              <Button onClick={handleEdit}>Guardar</Button>
+              <Button variant="outline" onClick={() => { setShowEdit(null); setForm({}); }}>Cancelar</Button>
+            </div>
+          </div>
+        </ComponentCard>
       </Modal>
-      {/* Modal eliminar */}
+      {/* Modal eliminar: usar Modal + ComponentCard como en crear/editar */}
       <Modal isOpen={!!showDelete} onClose={() => setShowDelete(null)}>
-        <h2 className="text-xl font-bold mb-4">Eliminar atleta</h2>
-        <p>¿Eliminar atleta <strong>{showDelete?.first_name} {showDelete?.last_name}</strong>? Esta acción no se puede deshacer.</p>
-        <div className="flex justify-end gap-2 mt-4">
-          <Button variant="outline" className="text-red-600 border-red-400 hover:bg-red-50" onClick={handleDelete}>Confirmar</Button>
-          <Button variant="outline" onClick={() => setShowDelete(null)}>Cancelar</Button>
-        </div>
+        <ComponentCard title="Eliminar atleta" desc={`¿Eliminar atleta ${showDelete?.first_name || ''} ${showDelete?.last_name || ''}? Esta acción no se puede deshacer.`}>
+          <div>
+            <p className="text-sm text-red-700 dark:text-red-200">Esta operación eliminará permanentemente al atleta seleccionado.</p>
+            <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4">
+              <Button variant="outline" className="text-red-600 border-red-400 hover:bg-red-50 dark:hover:bg-red-700/60" onClick={handleDelete}>Confirmar</Button>
+              <Button variant="outline" onClick={() => setShowDelete(null)}>Cancelar</Button>
+            </div>
+          </div>
+        </ComponentCard>
       </Modal>
     </div>
   );
