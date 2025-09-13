@@ -28,8 +28,8 @@ SECRET_KEY = "django-insecure-8ouq#fmvhip+beuhidnz8sn=ess&r$2^=vlcz9h1f_l84b3l_o
 DEBUG = True
 
 ALLOWED_HOSTS = ["luisi.run", "localhost", "127.0.0.1", ".vercel.app"]
-CSRF_TRUSTED_ORIGINS = ["https://luisi.run"]
-
+CSRF_TRUSTED_ORIGINS = ["https://luisi.run", "http://localhost:5173"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
 
 # Application definition
 
@@ -51,9 +51,11 @@ INSTALLED_APPS = [
     "rest_framework",
     # OpenAPI / schema generation
     "drf_spectacular",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -90,7 +92,6 @@ WSGI_APPLICATION = "core.wsgi.app"
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
 
 
 tmpPostgres = urlparse(
@@ -199,9 +200,7 @@ REST_FRAMEWORK = {
         # Keep session auth for the existing templates/HTMX usage
         "rest_framework.authentication.SessionAuthentication",
     ),
-    "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAuthenticated",
-    ),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     # Use drf-spectacular to generate OpenAPI 3 schema
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
@@ -210,6 +209,7 @@ REST_FRAMEWORK = {
 
 # Simple JWT settings (defaults can be adjusted in production)
 from datetime import timedelta
+
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
@@ -226,10 +226,22 @@ SPECTACULAR_SETTINGS = {
     "SECURITY": [{"bearerAuth": []}],
     # Group endpoints under meaningful tags for UI
     "TAGS": [
-        {"name": "Usuarios", "description": "CRUD de usuarios y administración de cuentas."},
+        {
+            "name": "Usuarios",
+            "description": "CRUD de usuarios y administración de cuentas.",
+        },
         {"name": "Grupos", "description": "Listado y detalles de grupos/deportes."},
-        {"name": "Asistencias", "description": "Registro y consulta de asistencias por alumno y fecha."},
-        {"name": "SessionDays", "description": "Fechas de sesiones (activar/desactivar)."},
-        {"name": "Pagos", "description": "Registro y gestión de pagos, incluyendo subida de comprobantes."},
+        {
+            "name": "Asistencias",
+            "description": "Registro y consulta de asistencias por alumno y fecha.",
+        },
+        {
+            "name": "SessionDays",
+            "description": "Fechas de sesiones (activar/desactivar).",
+        },
+        {
+            "name": "Pagos",
+            "description": "Registro y gestión de pagos, incluyendo subida de comprobantes.",
+        },
     ],
 }
