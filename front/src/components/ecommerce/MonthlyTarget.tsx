@@ -1,12 +1,19 @@
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { listAllUsers, UsersStats } from "../../services/user.service";
+import { listPagos } from "../../services/pago.service";
+import { Usuario, Pago } from "../../types/api";
+import { parseISO, isSameMonth } from 'date-fns';
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { MoreDotIcon } from "../../icons";
 
 export default function MonthlyTarget() {
-  const series = [75.55];
+  const [percent, setPercent] = useState<number>(0);
+  const [paidCount, setPaidCount] = useState<number>(0);
+  const [totalCount, setTotalCount] = useState<number>(0);
+  const series = [percent];
   const options: ApexOptions = {
     colors: ["#465FFF"],
     chart: {
@@ -56,6 +63,56 @@ export default function MonthlyTarget() {
   };
   const [isOpen, setIsOpen] = useState(false);
 
+  useEffect(() => {
+    let mounted = true;
+    async function fetchData() {
+      try {
+  // fetch aggregated users/athletes counts from the backend
+  const usersRes: UsersStats = await listAllUsers();
+    const pagosRes = await listPagos({ page: 1, page_size: 10000 });
+
+  const pagos: Pago[] = pagosRes.results || [];
+
+  // defensive parsing and debug
+  const totalUsers = usersRes && typeof usersRes.athletes_count === 'number' ? usersRes.athletes_count : Number(usersRes?.athletes_count ?? 0) || 0;
+  console.debug('[MonthlyTarget] usersRes', usersRes, 'parsed totalUsers', totalUsers, 'pagosCount', pagos.length);
+        // only consider pagos in the current month
+        const now = new Date();
+        const pagosThisMonth = pagos.filter((p) => {
+          if (!p.fecha_pago) return false;
+          try {
+            const d = parseISO(p.fecha_pago as string);
+            return isSameMonth(d, now);
+          } catch {
+            return false;
+          }
+        });
+
+        // determine unique user ids that have at least one pago this month
+        const paidUserIds = new Set<number>();
+        pagosThisMonth.forEach((p) => {
+          const alumno = (p as Pago & { alumno?: number | Usuario }).alumno;
+          if (!alumno) return;
+          if (typeof alumno === 'number') paidUserIds.add(alumno);
+          else if (typeof alumno === 'object' && alumno.id) paidUserIds.add(alumno.id);
+        });
+
+        const paid = paidUserIds.size;
+        const pct = totalUsers > 0 ? Math.round((paid / totalUsers) * 10000) / 100 : 0;
+        if (mounted) {
+          setPercent(pct);
+          setPaidCount(paid);
+          setTotalCount(totalUsers);
+        }
+      } catch (err) {
+        console.error('Error fetching monthly target data', err);
+        if (mounted) setPercent(0);
+      }
+    }
+    fetchData();
+    return () => { mounted = false; };
+  }, []);
+
   function toggleDropdown() {
     setIsOpen(!isOpen);
   }
@@ -69,11 +126,9 @@ export default function MonthlyTarget() {
         <div className="flex justify-between">
           <div>
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-              Monthly Target
+              Pagos de este mes
             </h3>
-            <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-              Target you’ve set for each month
-            </p>
+            
           </div>
           <div className="relative inline-block">
             <button className="dropdown-toggle" onClick={toggleDropdown}>
@@ -88,13 +143,7 @@ export default function MonthlyTarget() {
                 onItemClick={closeDropdown}
                 className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
               >
-                View More
-              </DropdownItem>
-              <DropdownItem
-                onItemClick={closeDropdown}
-                className="flex w-full font-normal text-left text-gray-500 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-              >
-                Delete
+                Ver más
               </DropdownItem>
             </Dropdown>
           </div>
@@ -113,86 +162,27 @@ export default function MonthlyTarget() {
             +10%
           </span>
         </div>
-        <p className="mx-auto mt-10 w-full max-w-[380px] text-center text-sm text-gray-500 sm:text-base">
-          You earn $3287 today, it's higher than last month. Keep up your good
-          work!
-        </p>
-      </div>
 
-      <div className="flex items-center justify-center gap-5 px-6 py-3.5 sm:gap-8 sm:py-5">
-        <div>
-          <p className="mb-1 text-center text-gray-500 text-theme-xs dark:text-gray-400 sm:text-sm">
-            Target
-          </p>
-          <p className="flex items-center justify-center gap-1 text-base font-semibold text-gray-800 dark:text-white/90 sm:text-lg">
-            $20K
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M7.26816 13.6632C7.4056 13.8192 7.60686 13.9176 7.8311 13.9176C7.83148 13.9176 7.83187 13.9176 7.83226 13.9176C8.02445 13.9178 8.21671 13.8447 8.36339 13.6981L12.3635 9.70076C12.6565 9.40797 12.6567 8.9331 12.3639 8.6401C12.0711 8.34711 11.5962 8.34694 11.3032 8.63973L8.5811 11.36L8.5811 2.5C8.5811 2.08579 8.24531 1.75 7.8311 1.75C7.41688 1.75 7.0811 2.08579 7.0811 2.5L7.0811 11.3556L4.36354 8.63975C4.07055 8.34695 3.59568 8.3471 3.30288 8.64009C3.01008 8.93307 3.01023 9.40794 3.30321 9.70075L7.26816 13.6632Z"
-                fill="#D92D20"
-              />
-            </svg>
-          </p>
-        </div>
+        <div className="mt-6 flex items-center justify-center gap-6 px-6 pb-6">
+          <div className="flex items-center gap-3">
+            <span className="w-3 h-3 rounded-full bg-[#465FFF] block"></span>
+            <div className="text-sm">
+              <div className="text-gray-700 dark:text-gray-300 font-medium">Pagados</div>
+              <div className="text-gray-500 dark:text-gray-400 text-xs">{paidCount} ({percent}%)</div>
+            </div>
+          </div>
 
-        <div className="w-px bg-gray-200 h-7 dark:bg-gray-800"></div>
-
-        <div>
-          <p className="mb-1 text-center text-gray-500 text-theme-xs dark:text-gray-400 sm:text-sm">
-            Revenue
-          </p>
-          <p className="flex items-center justify-center gap-1 text-base font-semibold text-gray-800 dark:text-white/90 sm:text-lg">
-            $20K
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M7.60141 2.33683C7.73885 2.18084 7.9401 2.08243 8.16435 2.08243C8.16475 2.08243 8.16516 2.08243 8.16556 2.08243C8.35773 2.08219 8.54998 2.15535 8.69664 2.30191L12.6968 6.29924C12.9898 6.59203 12.9899 7.0669 12.6971 7.3599C12.4044 7.6529 11.9295 7.65306 11.6365 7.36027L8.91435 4.64004L8.91435 13.5C8.91435 13.9142 8.57856 14.25 8.16435 14.25C7.75013 14.25 7.41435 13.9142 7.41435 13.5L7.41435 4.64442L4.69679 7.36025C4.4038 7.65305 3.92893 7.6529 3.63613 7.35992C3.34333 7.06693 3.34348 6.59206 3.63646 6.29926L7.60141 2.33683Z"
-                fill="#039855"
-              />
-            </svg>
-          </p>
-        </div>
-
-        <div className="w-px bg-gray-200 h-7 dark:bg-gray-800"></div>
-
-        <div>
-          <p className="mb-1 text-center text-gray-500 text-theme-xs dark:text-gray-400 sm:text-sm">
-            Today
-          </p>
-          <p className="flex items-center justify-center gap-1 text-base font-semibold text-gray-800 dark:text-white/90 sm:text-lg">
-            $20K
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M7.60141 2.33683C7.73885 2.18084 7.9401 2.08243 8.16435 2.08243C8.16475 2.08243 8.16516 2.08243 8.16556 2.08243C8.35773 2.08219 8.54998 2.15535 8.69664 2.30191L12.6968 6.29924C12.9898 6.59203 12.9899 7.0669 12.6971 7.3599C12.4044 7.6529 11.9295 7.65306 11.6365 7.36027L8.91435 4.64004L8.91435 13.5C8.91435 13.9142 8.57856 14.25 8.16435 14.25C7.75013 14.25 7.41435 13.9142 7.41435 13.5L7.41435 4.64442L4.69679 7.36025C4.4038 7.65305 3.92893 7.6529 3.63613 7.35992C3.34333 7.06693 3.34348 6.59206 3.63646 6.29926L7.60141 2.33683Z"
-                fill="#039855"
-              />
-            </svg>
-          </p>
+          <div className="flex items-center gap-3">
+            <span className="w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-300 block"></span>
+            <div className="text-sm">
+              <div className="text-gray-700 dark:text-gray-300 font-medium">No pagados</div>
+              <div className="text-gray-500 dark:text-gray-400 text-xs">{Math.max(0, totalCount - paidCount)} ({Math.max(0, Math.round((100 - percent) * 100) / 100)}%)</div>
+            </div>
+          </div>
         </div>
       </div>
+
+      
     </div>
   );
 }

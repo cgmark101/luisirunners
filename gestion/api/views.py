@@ -10,6 +10,22 @@ from .serializers import (
     PagoSerializer,
 )
 from drf_spectacular.utils import extend_schema
+from rest_framework.views import APIView
+
+
+@extend_schema(tags=["Usuarios"])
+class UserStatsView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        total_users = Usuario.objects.count()
+        # Athletes are users that have the custom Grupo FK set (e.g., 'juniors', 'juveniles')
+        # We count users where usuario.grupo is not null.
+        athletes = Usuario.objects.filter(grupo__isnull=False).distinct().count()
+        # Helpful debug log on the server side (will appear in runserver console)
+        # Avoid using print in production; for now it's useful during development.
+        print(f"[UserStatsView] Total users: {total_users}, Athletes (grupo FK): {athletes}")
+        return Response({"total_users": total_users, "athletes_count": athletes})
 
 
 

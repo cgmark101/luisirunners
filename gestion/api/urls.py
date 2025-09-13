@@ -5,6 +5,7 @@ from .views import (
     AsistenciaViewSet,
     SessionDayViewSet,
     PagoViewSet,
+    UserStatsView,
 )
 
 router = DefaultRouter()
@@ -15,3 +16,9 @@ router.register(r"session-days", SessionDayViewSet, basename="sessionday")
 router.register(r"pagos", PagoViewSet, basename="pago")
 
 urlpatterns = router.urls
+
+from django.urls import path
+
+urlpatterns += [
+    path('stats/users-count/', UserStatsView.as_view(), name='users-count'),
+]
