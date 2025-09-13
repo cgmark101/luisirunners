@@ -50,14 +50,15 @@ export const Modal: React.FC<ModalProps> = ({
   if (!isOpen) return null;
 
   const contentClasses = isFullscreen
-    ? "w-full h-full"
-    : "relative w-full max-w-xl sm:max-w-2xl md:max-w-3xl rounded-3xl bg-white dark:bg-gray-900 text-gray-900 dark:text-white max-h-[90vh] overflow-y-auto shadow-xl";
+    ? "w-full h-full z-[1055]"
+    : "relative w-full max-w-xl sm:max-w-2xl md:max-w-3xl rounded-3xl bg-white dark:bg-gray-900 text-gray-900 dark:text-white max-h-[90vh] overflow-y-auto shadow-xl z-[1055]";
 
   return (
+    // top-level wrapper must be above header/dropdowns; use z-50 for wrapper but ensure backdrop and content have higher explicit z's
     <div className="fixed inset-0 flex items-center justify-center overflow-y-auto modal z-50">
       {!isFullscreen && (
         <div
-          className="fixed inset-0 h-full w-full bg-gray-400/40 dark:bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 h-full w-full bg-gray-400/40 dark:bg-black/60 backdrop-blur-sm z-[1050]"
           onClick={onClose}
         ></div>
       )}
@@ -69,7 +70,8 @@ export const Modal: React.FC<ModalProps> = ({
         {showCloseButton && (
           <button
             onClick={onClose}
-            className="absolute right-3 top-3 z-999 flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white sm:right-6 sm:top-6 sm:h-11 sm:w-11"
+            // use a high but valid Tailwind z-index via arbitrary value
+            className="absolute right-3 top-3 z-[1060] flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white sm:right-6 sm:top-6 sm:h-11 sm:w-11"
           >
             <svg
               width="24"

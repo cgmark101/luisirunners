@@ -20,6 +20,7 @@ import ProtectedRoute from "./components/common/ProtectedRoute";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
 import AtletasPage from "./pages/AtletasPage";
+import PagosPage from "./pages/PagosPage";
 
 export default function App() {
   return (
@@ -44,6 +45,8 @@ export default function App() {
 
             {/* Atletas */}
             <Route path="/atletas" element={<AtletasPage />} />
+            {/* Pagos */}
+            <Route path="/pagos" element={<PagosPage />} />
 
             {/* Forms */}
             <Route path="/form-elements" element={<FormElements />} />

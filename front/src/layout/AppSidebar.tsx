@@ -28,18 +28,24 @@ type NavItem = {
 const navItems: NavItem[] = [
   {
     icon: <GridIcon />, 
-    name: "Dashboard",
-    subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+    name: "Panel",
+    //subItems: [{ name: "Panel", path: "/", pro: false }],
+    path: "/",
   },
   {
     icon: <CalenderIcon />, 
-    name: "Calendar",
+    name: "Calendario",
     path: "/calendar",
   },
   {
     icon: <UserCircleIcon />, 
     name: "Atletas",
     path: "/atletas",
+  },
+  {
+    icon: <TableIcon />,
+    name: "Pagos",
+    path: "/pagos",
   },
   {
     name: "Forms",
